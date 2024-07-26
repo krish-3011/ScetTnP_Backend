@@ -164,17 +164,6 @@ const data =`[
       "last_date": "2024-08-07",
       "compney": "64c2a1fae1d78f1b8f9e1c46",
       "applicants": ["64c2a1fae1d78f1b8f9e1c47"]
-    },
-    {
-      "_id": "64c2a1fae1d78f1b8f9e1c48",
-      "title": "SEO Specialist",
-      "location": ["Remote"],
-      "type": "Full-time",
-      "salary": 850000,
-      "criteria": {"minCGPA": 7.7},
-      "last_date": "2024-07-26",
-      "compney": "64c2a1fae1d78f1b8f9e1c49",
-      "applicants": ["64c2a1fae1d78f1b8f9e1c4a"]
     }
   ]
   

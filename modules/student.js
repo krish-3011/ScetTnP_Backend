@@ -4,13 +4,13 @@ const Offer = require("./offer.js");
 
 
 const studentSchema = mongoose.Schema({
-    enrollment_no : {
+    Enrollment_no : {
         type : String
     },
-    name : {
+    Name : {
         type : String
     },
-    email : {
+    Email : {
         type : String
     },
     result :{

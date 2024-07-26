@@ -6,7 +6,7 @@ const Student = require("../../modules/student.js");
 
 //Starting Server
 app.listen(port , ()=>{
-    console.log(`server is listing on port ${port}`);
+    console.log(`server is listing on port ${PORT}`);
 }
 );
 
@@ -161,5 +161,9 @@ const data =`[
   ]
   
 `;
-Student.deleteMany().then(console.log("Data deleted sucessfully")).catch(err => {console.log(`error in connecting database : ${err}`)});
-Student.insertMany(JSON.parse(data)).then(console.log("Data Inserted sucessfully")).catch(err => {console.log(`error in connecting database : ${err}`)});
+const main2 = async()=>{
+await Student.deleteMany().then(console.log("Data deleted sucessfully")).catch(err => {console.log(`error in connecting database : ${err}`)});
+await Student.insertMany(JSON.parse(data)).then(console.log("Data Inserted sucessfully")).catch(err => {console.log(`error in connecting database : ${err}`)});
+}
+
+main2()

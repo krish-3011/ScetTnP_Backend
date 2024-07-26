@@ -24,7 +24,7 @@ router.post("/",wrapAsync( async (req,res)=> {
 
     //retriving data from request body
     console.log(req.body);
-    let offer = req.body;
+    let {offer} = req.body;
     console.log(offer);
 
     //adding formate to criteria
