@@ -10,12 +10,16 @@ app.listen(port , ()=>{
 }
 );
 
+const dotEnv = require("dotenv");
+
+dotEnv.config();
+const DB_URL = process.env.DB_URL;
+const PORT = process.env.PORT
 //connecting database
 async function main(){
-    await mongoose.connect("mongodb://127.0.0.1/scetTnP");
+    await mongoose.connect(DB_URL);
 }
 main().then(console.log("Database connected")).catch(err => {console.log(`error in connecting database : ${err}`)});
-
 //Intialize data
 const data =`[
     {
