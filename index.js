@@ -40,6 +40,6 @@ app.use((err,req,res,next)=>{
 
 //Starting Server
 app.listen(PORT, ()=>{
-    console.log(`server is listing on port ${port}`);
+    console.log(`server is listing on port ${PORT}`);
 }
 );
