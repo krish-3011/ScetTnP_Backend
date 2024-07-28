@@ -36,7 +36,7 @@ router.post("/",wrapAsync( async (req,res)=> {
    
 
     //getting companies id
-    let company = await Company.find({name : offer.companyName});
+    let company = await Company.find({name : offer.name});
     company = company[0];
     console.log(company);
     if(object.isEmpty(company)){
@@ -44,9 +44,9 @@ router.post("/",wrapAsync( async (req,res)=> {
     }
     
     const newOffer = new Offer({
-        title : offer.title,
+        role : offer.role,
         location : offer.location.split(","),
-        salary : offer.salary,
+        salary: {min : offer.salary},
         criteria : offer.criteria,
         last_date : offer.last_date,
         company : company._id,
