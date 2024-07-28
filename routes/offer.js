@@ -10,12 +10,10 @@ const object = require("../utils/functions/Object.js");
 router.get("/",wrapAsync(async (req,res)=>{
 
     //finding all offers from database
-    let offers = await Offer.find({});
+    let offers = await Offer.find({}).populate('company');
 
-    res.render("offers/listing.ejs",{offers});
-
-    // //sending json object of all offers array
-    // res.status(200).json({offers});
+    //sending json object of all offers array
+    res.status(200).json({offers});
     
 }));
 
