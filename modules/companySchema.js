@@ -8,6 +8,9 @@ const companySchema = mongoose.Schema({
     name : {
         type : String
     },
+    logo : {
+        type : String
+    },
     link : {
         type : String
     },
