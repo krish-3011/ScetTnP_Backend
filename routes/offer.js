@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Offer = require("../modules/offer.js");
-const Company = require("../modules/company.js");
+const Offer = require("../modules/offerSchema.js");
+const Company = require("../modules/companySchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
 
