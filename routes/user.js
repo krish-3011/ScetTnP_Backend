@@ -79,7 +79,7 @@ router.get("/:enrollNo",wrapAsync(async (req,res,next)=>{
 
     //chacking valid id
     if(student){
-        res.status(200).json(JSON.stringify(student[0]));
+        res.status(200).json(student[0]);
     }
 
     //sending offer
