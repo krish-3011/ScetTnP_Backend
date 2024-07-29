@@ -36,7 +36,7 @@ router.post("/",wrapAsync( async (req,res)=> {
    
 
     //getting companies id
-    let company = await Company.find({name : offer.name});
+    let company = await Company.find({name : offer.companyName});
     company = company[0];
     console.log(company);
     if(object.isEmpty(company)){
@@ -44,7 +44,8 @@ router.post("/",wrapAsync( async (req,res)=> {
     }
     
     const newOffer = new Offer({
-        role : offer.role,
+        role : offer.title,
+        type : offer.type,
         location : offer.location.split(","),
         salary: {min : offer.salary},
         criteria : offer.criteria,
@@ -115,7 +116,7 @@ router.patch("/:id",async (req,res)=>{
     //update data
     let newOffer = await Offer.findByIdAndUpdate(id ,{$set :{title : title , location : location.split(","), type:type , salary : salary , last_date : last_date , criteria : criteria }},{ new : true}).then(console.log("data updated")).catch((err) =>{console.log("data not updated")});
 
-    //sending a completed signal
+    //sending a completed signals
     res.status(200).json({message : "Data updated successfully "});
     
     
