@@ -22,7 +22,7 @@ router.post("/",wrapAsync( async (req,res)=> {
 
     //retriving data from request body
     console.log(req.body);
-    let {offer} = req.body;
+    let offer = req.body;
     console.log(offer);
 
     //adding formate to criteria
@@ -55,7 +55,7 @@ router.post("/",wrapAsync( async (req,res)=> {
 
     const savedOffer = await newOffer.save();
     
-    company.offers.push(savedOffer._id);
+    Company.offers.push(savedOffer._id);
     Company.findByIdAndUpdate(company._id,{$set :{offers : company.offers}});
 
     res.status(200).json({message : "new user saved"});
