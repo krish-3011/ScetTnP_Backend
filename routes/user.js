@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Offer = require("../modules/offerSchema.js");
-const Company = require("../modules/companySchema.js");
+const Student = require("../modules/studentSchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
+const { json } = require("express/lib/response.js");
 
 //Index Route
 router.get("/",wrapAsync(async (req,res)=>{
 
     //finding all offers from database
-    let offers = await Offer.find({}).populate('company');
+    let student = await Student.find({enrollment_no : enrollNo}).populate('applied').populate('selected');
 
     //sending json object of all offers array
     res.status(200).json(JSON.stringify({offers}));
@@ -58,28 +58,33 @@ router.post("/",wrapAsync( async (req,res)=> {
     company.offers.push(savedOffer._id);
     Company.findByIdAndUpdate(company._id,{$set :{offers : company.offers}});
 
-    res.status(200).json(JSON.stringify({message : "new user saved"}));
+    res.status(200).json({message : "new user saved"});
     // console.log(offer);
     // res.send("post req on /");
 }));
 
+//temp forms
+router.get("/new",wrapAsync(async (req,res,next)=>{
+    res.render("offers/new.ejs");
+}));
 
 //show Route
-router.get("/:id",wrapAsync(async (req,res,next)=>{
+router.get("/:enrollNo",wrapAsync(async (req,res,next)=>{
 
     //retriving offer is from url
-    let {id} = req.params
+    let {enrollNo} = req.params
 
     //finding offer in DB
-    let offer = await Offer.findById(id);
+    let student = await Student.find({enrollment_no : enrollNo});
 
     //chacking valid id
-    if(!offer){
-        throw new Error("Invalid Id");
+    if(student){
+        res.status(200).json(JSON.stringify(student[0]));
     }
 
     //sending offer
-    res.status(200).json(JSON.stringify(offer));
+    
+    res.status(400).json(JSON.stringify({message : "student not available"}));
 }));
 
 //update Route
@@ -113,7 +118,7 @@ router.patch("/:id",async (req,res)=>{
     let newOffer = await Offer.findByIdAndUpdate(id ,{$set :{title : title , location : location.split(","), type:type , salary : salary , last_date : last_date , criteria : criteria }},{ new : true}).then(console.log("data updated")).catch((err) =>{console.log("data not updated")});
 
     //sending a completed signals
-    res.status(200).json(JSON.stringify({message : "Data updated successfully "}));
+    res.status(200).json({message : "Data updated successfully "});
     
     
 });
@@ -142,7 +147,7 @@ router.delete("/:id",wrapAsync( async (req,res)=>{
     let deletedOffer = await Offer.findByIdAndDelete(id);
     console.log(deletedOffer);
 
-    res.status(200).json(JSON.stringify({message : "Offer deleted sucessfully"}));
+    res.status(200).json({message : "Offer deleted sucessfully"});
 }));
 
 module.exports = router

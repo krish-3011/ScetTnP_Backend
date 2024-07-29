@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const staticRouter = require("./routes/staticRoute.js");
 const offer = require("./routes/offer.js");
+const user = require("./routes/user.js");
 const methodOverride = require("method-override");
 const wrapAsync = require("./utils/wrapAsync.js");
 const cors = require("cors");
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname,"/public")))
 //adding Router
 app.use("/",staticRouter);
 app.use("/offers",offer);
+app.use("/user",user);
 
 //error handling
 app.use((err,req,res,next)=>{
