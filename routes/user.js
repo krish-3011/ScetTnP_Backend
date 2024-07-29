@@ -13,7 +13,7 @@ router.get("/",wrapAsync(async (req,res)=>{
     let student = await Student.find({enrollment_no : enrollNo}).populate('applied').populate('selected');
 
     //sending json object of all offers array
-    res.status(200).json(JSON.stringify({offers}));
+    res.status(200).json({offers});
     
 }));
 
@@ -84,7 +84,7 @@ router.get("/:enrollNo",wrapAsync(async (req,res,next)=>{
 
     //sending offer
     
-    res.status(400).json(JSON.stringify({message : "student not available"}));
+    res.status(400).json({message : "student not available"});
 }));
 
 //update Route
