@@ -55,7 +55,7 @@ router.post("/",wrapAsync( async (req,res)=> {
 
     const savedOffer = await newOffer.save();
     
-    Company.offers.push(savedOffer._id);
+    company.offers.push(savedOffer._id);
     Company.findByIdAndUpdate(company._id,{$set :{offers : company.offers}});
 
     res.status(200).json({message : "new user saved"});
