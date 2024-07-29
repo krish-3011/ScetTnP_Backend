@@ -10,10 +10,10 @@ const { json } = require("express/lib/response.js");
 router.get("/",wrapAsync(async (req,res)=>{
 
     //finding all offers from database
-    let student = await Student.find({enrollment_no : enrollNo}).populate('applied').populate('selected');
+    let student = await Student.find().populate('applied').populate('selected');
 
     //sending json object of all offers array
-    res.status(200).json({offers});
+    res.status(200).json({student});
     
 }));
 
