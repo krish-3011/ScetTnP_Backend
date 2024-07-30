@@ -5,6 +5,7 @@ const path = require("path");
 const staticRouter = require("./routes/staticRoute.js");
 const offer = require("./routes/offer.js");
 const user = require("./routes/user.js");
+const auth = require("./routes/auth.js");
 const methodOverride = require("method-override");
 const wrapAsync = require("./utils/wrapAsync.js");
 const cors = require("cors");
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname,"/public")))
 app.use("/",staticRouter);
 app.use("/offers",offer);
 app.use("/user",user);
+app.use("/auth",auth);
 
 //error handling
 app.use((err,req,res,next)=>{

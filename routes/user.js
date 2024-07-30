@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Student = require("../modules/studentSchema.js");
+const Offer = require("../modules/offerSchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
-const { json } = require("express/lib/response.js");
 
 //Index Route
 router.get("/",wrapAsync(async (req,res)=>{
@@ -21,9 +21,7 @@ router.get("/",wrapAsync(async (req,res)=>{
 router.post("/",wrapAsync( async (req,res)=> {
 
     //retriving data from request body
-    console.log(req.body);
     let offer = req.body;
-    console.log(offer);
 
     //adding formate to criteria
     offer.criteria = offer.criteria.split("\r\n");
@@ -38,7 +36,6 @@ router.post("/",wrapAsync( async (req,res)=> {
     //getting companies id
     let company = await Company.find({name : offer.companyName});
     company = company[0];
-    console.log(company);
     if(object.isEmpty(company)){
         throw new Error("regisiter company first");
     }
