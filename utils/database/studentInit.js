@@ -59,9 +59,7 @@ const data =`[
             }
         },
         "applied": ["64c3c32f1d1c1f29f2e80b94", "64c3c3541d1c1f29f2e80b95"],
-        "selected": [{
-            "type": "64c3c32f1d1c1f29f2e80b94"
-        }]
+        "selected": [{"64c3c32f1d1c1f29f2e80b94",100000}]
     },
     {
         "_id": "64c3c3e91d1c1f29f2e80b98",

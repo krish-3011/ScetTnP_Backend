@@ -71,8 +71,13 @@ const studentSchema = mongoose.Schema({
     }],
     selected : [{
         type : {
-            type : mongoose.Schema.ObjectId,
-            ref : 'Offer'
+            offer:{
+                type:mongoose.Schema.ObjectId,
+                ref : 'Offer'
+            },
+            salary : {
+                type : Number,
+            }
         }
     }]
 
