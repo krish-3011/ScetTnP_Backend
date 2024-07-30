@@ -1,27 +1,40 @@
 const express = require("express");
+const session = require('express-session');
+const cors = require('cors');
 const router = express.Router();
 const mongoose = require("mongoose");
 const Student = require("../modules/studentSchema.js");
-const Offer = require("../modules/offerSchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 
-//authenticate
-router.post("/",async (req,res)=>{
+// Enable CORS
+router.use(cors({
+    origin: 'https://scettnp-frontend.onrender.com', // Specify your frontend origin
+    credentials: true // Allow cookies to be sent with requests
+}));
 
-    let { enrollmentNo , birthDate } = req.body;
+// Configure session middleware
+router.use(session({
+    secret: 'Scettt',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set secure to true if using HTTPS
+}));
 
-    let profile = await Student.find({enrollment_no : enrollmentNo});
-    if(!profile){
-        res.status(404).json({message : "Student not found"});
+// Authenticate user
+router.post("/", wrapAsync(async (req, res) => {
+    let { enrollmentNo, birthDate } = req.body;
+
+    let profile = await Student.findOne({ enrollment_no: enrollmentNo });
+    if (!profile) {
+        return res.status(404).json({ message: "Student not found" });
     }
 
-    profile = profile[0];
-
-    if(profile.birth_date.slice(0,10) === birthDate){
+    if (profile.birth_date.slice(0, 10) === birthDate) {
+        req.session.user = profile; // Store user in session
         res.status(200).json(profile);
     } else {
-        res.send(401).json({message : "wrong credentials"})
+        res.status(401).json({ message: "Wrong credentials" });
     }
-});
+}));
 
 module.exports = router;
