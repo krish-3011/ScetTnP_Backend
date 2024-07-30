@@ -30,7 +30,7 @@ router.post("/", wrapAsync(async (req, res) => {
     }
 
     console.log(`${profile.birth_date.toString().slice(0, 10)} === ${birthDate}`);
-    if (profile.birth_date.toString().slice(0, 10) === birthDate) {
+    if (profile.birth_date.toISOString().slice(0, 10) === birthDate.toISOString().slice(0, 10)) {
         req.session.user = profile; // Store user in session
         res.status(200).json(profile);
     } else {
