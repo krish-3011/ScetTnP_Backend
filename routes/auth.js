@@ -23,6 +23,8 @@ router.use(session({
 // Authenticate user
 router.post("/", wrapAsync(async (req, res) => {
     let { enrollmentNo, birthDate } = req.body;
+    console.log(enrollmentNo);
+    console.log(birthDate);
 
     let profile = await Student.findOne({ enrollment_no: enrollmentNo });
     if (!profile) {
