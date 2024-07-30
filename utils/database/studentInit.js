@@ -4,20 +4,22 @@ const port = 8080;
 const mongoose = require("mongoose");
 const Student = require("../../modules/studentSchema.js");
 
-//Starting Server
-app.listen(port , ()=>{
-    console.log(`server is listing on port ${PORT}`);
-}
-);
+
 
 const dotEnv = require("dotenv");
 
 dotEnv.config();
 const DB_URL = process.env.DB_URL;
 const PORT = process.env.PORT
+
+//Starting Server
+app.listen(port , ()=>{
+    console.log(`server is listing on port ${port}`);
+}
+);
 //connecting database
 async function main(){
-    await mongoose.connect(DB_URL);
+    await mongoose.connect("mongodb+srv://krishpatel-3011:uz6pGaPneq1LJjv2@cluster0.ife8a3d.mongodb.net/scetTnP");
 }
 main().then(console.log("Database connected")).catch(err => {console.log(`error in connecting database : ${err}`)});
 
@@ -59,7 +61,7 @@ const data =`[
             }
         },
         "applied": ["64c3c32f1d1c1f29f2e80b94", "64c3c3541d1c1f29f2e80b95"],
-        "selected": [{"64c3c32f1d1c1f29f2e80b94",100000}]
+        "selected": [{"offer":"64c3c32f1d1c1f29f2e80b94","salary":100000}]
     },
     {
         "_id": "64c3c3e91d1c1f29f2e80b98",
