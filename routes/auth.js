@@ -28,9 +28,11 @@ router.post("/", wrapAsync(async (req, res) => {
     if (!profile) {
         return res.status(404).json({ message: "Student not found" });
     }
+
+    //setting date as obj
     profile.birth_date = new Date(profile.birth_date);
     birthDate = new Date(birthDate);
-    console.log(`${profile.birth_date.toString().slice(0, 10)} === ${birthDate.toISOString().slice(0, 10)}`);
+
     if (profile.birth_date.toISOString().slice(0, 10) === birthDate.toISOString().slice(0, 10)) {
         req.session.user = profile; // Store user in session
         res.status(200).json(profile);

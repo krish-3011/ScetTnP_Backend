@@ -6,11 +6,13 @@ const staticRouter = require("./routes/staticRoute.js");
 const offer = require("./routes/offer.js");
 const user = require("./routes/user.js");
 const auth = require("./routes/auth.js");
+const company = require("./routes/company.js");
 const methodOverride = require("method-override");
 const wrapAsync = require("./utils/wrapAsync.js");
 const cors = require("cors");
 const dotEnv = require("dotenv");
 const session = require('express-session');
+const Company = require("./modules/companySchema.js");
 
 dotEnv.config();
 
@@ -46,11 +48,12 @@ app.use("/", staticRouter);
 app.use("/offers", offer);
 app.use("/user", user);
 app.use("/auth", auth);
+app.use("/company", company);
+
 
 // Error handling
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(err.status).json({ message: err.message });
 });
 
 // Start server

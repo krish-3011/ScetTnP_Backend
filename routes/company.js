@@ -5,15 +5,16 @@ const Offer = require("../modules/offerSchema.js");
 const Company = require("../modules/companySchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
+const { compile } = require("ejs");
 
 //Index Route
 router.get("/",wrapAsync(async (req,res)=>{
 
     //finding all offers from database
-    let offers = await Offer.find({}).populate('company');
+    let companies = await Company.find({}).populate('company');
 
     //sending json object of all offers array
-    res.status(200).json({offers});
+    res.status(200).json({companies});
     
 }));
 
@@ -21,40 +22,26 @@ router.get("/",wrapAsync(async (req,res)=>{
 router.post("/",wrapAsync( async (req,res)=> {
 
     //retriving data from request body
-    let offer = req.body;
-
-    //adding formate to criteria
-    offer.criteria = offer.criteria.split("\r\n");
-    criteria=offer.criteria;
-    offer.criteria={};
-    for(cri of criteria){
-        cri=cri.split(":");
-        offer.criteria[cri[0]] = cri[1];
-    }
-   
+    let companyData = req.body;
 
     //getting companies id
-    let company = await Company.findOne({name : offer.companyName});
-    if(!company){
-        let err = new Error("company not exsist !! please register company first .")
-        err.status = 400
+    let company = await Company.findOne({name : companyData.name});
+    if(company){
+        let err = new Error("Company already exsist");
+        err.status = 400;
         throw err;
     }
     
-    const newOffer = new Offer({
-        role : offer.title,
-        type : offer.type,
-        location : offer.location.split(","),
-        salary: {min : offer.salary},
-        criteria : offer.criteria,
-        last_date : offer.last_date,
-        company : company._id,
+    const newCompany = new Company({
+        name : companyData.CompnayName,
+        logo : companyData.Logo,
+        link :companyData.Link,
+        desc :companyData.Description,
+        contact_no :{ country_code : "+91" , number : companyData.Contact},
+        address : companyData.Address,
     });
 
-    const savedOffer = await newOffer.save();
-    
-    company.offers.push(savedOffer._id);
-    Company.findByIdAndUpdate(company._id,{$set :{offers : company.offers}});
+    const savedCompany = await newCompany.save();
 
     res.status(200).json({message : "new user saved"});
 }));
@@ -67,17 +54,17 @@ router.get("/:id",wrapAsync(async (req,res,next)=>{
     let {id} = req.params
 
     //finding offer in DB
-    let offer = await Offer.findById(id);
+    let compnay = await Company.findById(id);
 
     //chacking valid id
-    if(!offer){
-        let err = new Error("Offer not exsist")
-        err.status = 400
+    if(!compnay){
+        let err = new Error("Company not found...");
+        err.status = 400;
         throw err;
     }
 
     //sending offer
-    res.status(200).json(offer);
+    res.status(200).json(compnay);
 }));
 
 //update Route
@@ -87,28 +74,16 @@ router.patch("/:id",async (req,res)=>{
     //retriving data from request body
     let {id,title,location,type,salary,last_date, ...criteria} = req.body
 
-    //criteria : {criteria : {} }
-    //simplifying obj -> criteria : {}
-    criteria = criteria.criteria;
 
-    // if criteria having a array of data , it is in string
-    //retrive in form of array
-    for (cri in criteria){
-        if(criteria[cri].includes(",")){
-            criteria.criteria[cri] = criteria.criteria[cri].split(",");
-        }
-    }
+    //finding offer in DB
+    let compnay = await Company.findById(id);
 
-    //finding obj from DB
-    let offer = await Offer.findById(id);
-
-    //cheak for valid offer id
-    if(!offer){
-        let err = new Error("Offer not found...")
-        err.status = 400
+    //chacking valid id
+    if(!compnay){
+        let err = new Error("Company not found...");
+        err.status = 400;
         throw err;
     }
-
     //update data
     let newOffer = await Offer.findByIdAndUpdate(id ,{$set :{title : title , location : location.split(","), type:type , salary : salary , last_date : last_date , criteria : criteria }},{ new : true}).then(console.log("data updated")).catch((err) =>{console.log("data not updated")});
 
