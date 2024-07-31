@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Student = require("../modules/studentSchema.js");
-const Offer = require("../modules/offerSchema.js");
+const Student = require("../schema/model/studentSchema.js");
+const Offer = require("../schema/model/offerSchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
 

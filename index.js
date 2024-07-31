@@ -12,7 +12,7 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const cors = require("cors");
 const dotEnv = require("dotenv");
 const session = require('express-session');
-const Company = require("./modules/companySchema.js");
+const Company = require("./schema/model/companySchema.js");
 
 dotEnv.config();
 

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Student = require("../modules/studentSchema.js");
+const Student = require("../schema/model/studentSchema.js");
 const object = require("../utils/functions/Object.js");
 
 //Home Route
