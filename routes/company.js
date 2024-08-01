@@ -43,8 +43,11 @@ router.get("/",wrapAsync(async (req,res)=>{
 router.post("/",upload.single('Logo'),wrapAsync( async (req,res)=> {
 
     //retriving data from request body
-    let companyData = req.body;
     console.log(req.file);
+    console.log(req.body);
+
+    let companyData = req.body;
+    
     //getting companies id
     let company = await Company.findOne({name : companyData.name});
     if(company){
@@ -62,7 +65,7 @@ router.post("/",upload.single('Logo'),wrapAsync( async (req,res)=> {
         address : companyData.Address,
     });
 
-    const savedCompany = await newCompany.save();
+    // const savedCompany = await newCompany.save();
 
     res.status(200).json({message : "new user saved"});
 }));
