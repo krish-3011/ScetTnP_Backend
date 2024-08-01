@@ -6,6 +6,27 @@ const Company = require("../schema/model/companySchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
 const { compile } = require("ejs");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+// Cloudinary configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  
+  // Cloudinary storage configuration
+  const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'ScetTnp', // folder name in your Cloudinary
+      allowedFormats : ['jpg', 'jpeg', 'png'], // format of the uploaded file
+    },
+  });
+  const upload = multer({ storage : storage });
+
 
 //Index Route
 router.get("/",wrapAsync(async (req,res)=>{
@@ -19,7 +40,7 @@ router.get("/",wrapAsync(async (req,res)=>{
 }));
 
 //new Route
-router.post("/",wrapAsync( async (req,res)=> {
+router.post("/",upload.single('Logo'),wrapAsync( async (req,res)=> {
 
     //retriving data from request body
     let companyData = req.body;
@@ -34,7 +55,7 @@ router.post("/",wrapAsync( async (req,res)=> {
     
     const newCompany = new Company({
         name : companyData.CompnayName,
-        logo : companyData.Logo,
+        logo : {link : req.file.path , file_name : req.file.filename},
         link :companyData.Link,
         desc :companyData.Description,
         contact_no :{ country_code : "+91" , number : companyData.Contact},
