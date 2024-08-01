@@ -21,7 +21,7 @@ router.get("/home",async (req,res,next) => {
 
     let enrollment_no = `ET${year}BT${dept}.{3}`;
 
-    let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : {}};
+    let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { core : {} , IT : {} , managment : {}}};
     let students = await Student.find({enrollment_no :{$regex : enrollment_no}});
     if(students.length > 0){
         for(let student of students){
@@ -45,7 +45,11 @@ router.get("/home",async (req,res,next) => {
         let yearStr = `${currentYear}`
         statObj.highestPackge[yearStr] = 0;
         statObj.averagePackge[yearStr] = 0;
-        statObj.sector[yearStr] = { core : 0 , IT : 0, Managment : 0}
+        // statObj.sector[yearStr] = { core : 0 , IT : 0, Managment : 0}
+        statObj.sector.core[yearStr] = 0;
+        statObj.sector.IT[yearStr] = 0;
+        statObj.sector.managment[yearStr] = 0;
+
         sum[yearStr] = {salary : 0 , students : 0};
         
         currentYear -= 1;
@@ -68,7 +72,7 @@ router.get("/home",async (req,res,next) => {
 
                 //setor data
                 let sector = student.selected.offer.sector;
-                statObj.sector[addYear][sector] += 1;
+                statObj.sector[sector][addYear] += 1;
             }
         }
         for(let year in statObj.averagePackge){
