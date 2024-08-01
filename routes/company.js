@@ -44,7 +44,7 @@ router.post("/",upload.single('Logo'),wrapAsync( async (req,res)=> {
 
     //retriving data from request body
     let companyData = req.body;
-
+    console.log(req.file);
     //getting companies id
     let company = await Company.findOne({name : companyData.name});
     if(company){
@@ -55,7 +55,7 @@ router.post("/",upload.single('Logo'),wrapAsync( async (req,res)=> {
     
     const newCompany = new Company({
         name : companyData.CompnayName,
-        logo : {link : req.file.path , file_name : req.file.filename},
+        // logo : {link : req.file.path , file_name : req.file.filename},
         link :companyData.Link,
         desc :companyData.Description,
         contact_no :{ country_code : "+91" , number : companyData.Contact},
