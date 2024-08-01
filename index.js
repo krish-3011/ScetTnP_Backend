@@ -27,7 +27,7 @@ main().then(() => console.log("Database connected")).catch(err => console.log(`E
 
 // Middleware
 app.use(cors({
-    origin: 'https://scettnp-frontend.onrender.com', // Specify your frontend origin
+    origin: ['https://scettnp-frontend.onrender.com','http://localhost:3000'], // Specify your frontend origin
     credentials: true // Allow cookies to be sent with requests
 }));
 app.use(session({
