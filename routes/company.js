@@ -25,7 +25,7 @@ cloudinary.config({
       allowedFormats : ['jpg', 'jpeg', 'png'], // format of the uploaded file
     },
   });
-  const upload = multer({ storage : storage });
+  const upload = multer({ dest : "uploads/" });
 
 
 //Index Route
