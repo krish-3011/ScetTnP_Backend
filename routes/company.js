@@ -58,7 +58,7 @@ router.post("/",upload.single('Logo'),wrapAsync( async (req,res)=> {
     
     const newCompany = new Company({
         name : companyData.CompnayName,
-        // logo : {link : req.file.path , file_name : req.file.filename},
+        logo : {link : req.file.path , file_name : req.file.filename},
         link :companyData.Link,
         desc :companyData.Description,
         contact_no :{ country_code : "+91" , number : companyData.Contact},
