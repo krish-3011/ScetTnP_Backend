@@ -1,43 +1,39 @@
-const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
 const Offer = require("./offerSchema.js");
-const { fileLoader } = require("ejs");
 
-
-
-const companySchema = mongoose.Schema({
-    name : {
-        type : String
+// Define the company schema
+const companySchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
     },
-    logo : {
-        type : {
-            link : String,
-            file_name : String
-        }
+    logo: {
+        link: String,
+        file_name: String
     },
-    link : {
-        type : String
+    link: {
+        type: String
     },
-    desc : {
-        type : String
+    desc: {
+        type: String
     },
-    contact_no : {
-        type : {
-            country_code : String,
-            number : String
-        },
+    contact_no: {
+        country_code: String,
+        number: String
     },
-    address : {
-        type : String,
+    address: {
+        type: String,
     },
-    extra_attribute : {
-        type : Object,
+    extra_attribute: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed
     },
-    offers : [{
-        type : mongoose.Schema.ObjectId,
-        ref : 'Offer'
+    offers: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Offer'
     }]
 });
 
-const Company = mongoose.model("Company",companySchema);
+// Create the Company model
+const Company = mongoose.model("Company", companySchema);
 module.exports = Company;

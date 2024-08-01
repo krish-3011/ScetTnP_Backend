@@ -4,8 +4,6 @@ const mongoose = require("mongoose");
 const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
-const object = require("../utils/functions/Object.js");
-const { compile } = require("ejs");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -15,132 +13,122 @@ cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-  
-  // Cloudinary storage configuration
-  const storage = new CloudinaryStorage({
+});
+
+// Cloudinary storage configuration
+const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-      folder: 'ScetTnP', // folder name in your Cloudinary
-      allowedFormats : ['jpg', 'jpeg', 'png'], // format of the uploaded file
+        folder: 'ScetTnP', // folder name in your Cloudinary
+        allowedFormats: ['jpg', 'jpeg', 'png'], // format of the uploaded file
     },
-  });
-  const upload = multer({ dest : "uploads/" });
+});
+const upload = multer({ storage });
 
-
-//Index Route
-router.get("/",wrapAsync(async (req,res)=>{
-
-    //finding all offers from database
-    let companies = await Company.find({}).populate('company');
-
-    //sending json object of all offers array
-    res.status(200).json({companies});
-    
+// Index Route
+router.get("/", wrapAsync(async (req, res) => {
+    // Finding all companies from the database and populating offers
+    let companies = await Company.find({}).populate('offers');
+    res.status(200).json({ companies });
 }));
 
-//new Route
-router.post("/",upload.single('Logo'),wrapAsync( async (req,res)=> {
-
-    //retriving data from request body
+// New Route
+router.post("/", upload.single('Logo'), wrapAsync(async (req, res) => {
     console.log(req.file);
     console.log(req.body);
 
     let companyData = req.body;
-    
-    //getting companies id
-    let company = await Company.findOne({name : companyData.name});
-    if(company){
-        let err = new Error("Company already exsist");
+
+    let company = await Company.findOne({ name: companyData.name });
+    if (company) {
+        let err = new Error("Company already exists");
         err.status = 400;
         throw err;
     }
-    
+
+    // Create a new company with Cloudinary URL
     const newCompany = new Company({
-        name : companyData.CompnayName,
-        logo : {link : req.file.path , file_name : req.file.filename},
-        link :companyData.Link,
-        desc :companyData.Description,
-        contact_no :{ country_code : "+91" , number : companyData.Contact},
-        address : companyData.Address,
+        name: companyData.CompnayName,
+        logo: {
+            link: req.file.path, // URL from Cloudinary
+            file_name: req.file.filename
+        },
+        link: companyData.Link,
+        desc: companyData.Description,
+        contact_no: {
+            country_code: "+91",
+            number: companyData.Contact
+        },
+        address: companyData.Address,
     });
 
-    // const savedCompany = await newCompany.save();
+    await newCompany.save();
 
-    res.status(200).json({message : "new user saved"});
+    res.status(200).json({ message: "New company saved" });
 }));
 
+// Show Route
+router.get("/:id", wrapAsync(async (req, res, next) => {
+    let { id } = req.params;
 
-//show Route
-router.get("/:id",wrapAsync(async (req,res,next)=>{
-
-    //retriving offer is from url
-    let {id} = req.params
-
-    //finding offer in DB
-    let compnay = await Company.findById(id);
-
-    //chacking valid id
-    if(!compnay){
+    // Finding company by ID
+    let company = await Company.findById(id).populate('offers');
+    if (!company) {
         let err = new Error("Company not found...");
+        err.status = 404;
+        throw err;
+    }
+
+    res.status(200).json(company);
+}));
+
+// Update Route
+router.patch("/:id", wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    let updateData = req.body;
+
+    // Find company by ID and update fields
+    let company = await Company.findById(id);
+    if (!company) {
+        let err = new Error("Company not found...");
+        err.status = 404;
+        throw err;
+    }
+
+    // Update company data
+    await Company.findByIdAndUpdate(id, { $set: updateData }, { new: true });
+
+    res.status(200).json({ message: "Company updated successfully" });
+}));
+
+// Temp Form Route
+router.get("/:id/update", wrapAsync(async (req, res, next) => {
+    let { id } = req.params;
+
+    // Finding offer by ID
+    let offer = await Offer.findById(id);
+    if (!offer) {
+        let err = new Error("Invalid ID");
         err.status = 400;
         throw err;
     }
 
-    //sending offer
-    res.status(200).json(compnay);
+    res.render("offers/update.ejs", offer);
 }));
 
-//update Route
+// Delete Route
+router.delete("/:id", wrapAsync(async (req, res) => {
+    let { id } = req.params;
 
-router.patch("/:id",async (req,res)=>{
-
-    //retriving data from request body
-    let {id,title,location,type,salary,last_date, ...criteria} = req.body
-
-
-    //finding offer in DB
-    let compnay = await Company.findById(id);
-
-    //chacking valid id
-    if(!compnay){
+    // Deleting company by ID
+    let deletedCompany = await Company.findByIdAndDelete(id);
+    if (!deletedCompany) {
         let err = new Error("Company not found...");
-        err.status = 400;
+        err.status = 404;
         throw err;
     }
-    //update data
-    let newOffer = await Offer.findByIdAndUpdate(id ,{$set :{title : title , location : location.split(","), type:type , salary : salary , last_date : last_date , criteria : criteria }},{ new : true}).then(console.log("data updated")).catch((err) =>{console.log("data not updated")});
 
-    //sending a completed signals
-    res.status(200).json({message : "Data updated successfully "});
-    
-});
-
-
-//temp form
-router.get("/:id/update",wrapAsync(async (req,res,next)=>{
-
-    //retriving id from url
-    let {id} = req.params
-
-    //fanding offer in DB
-    let  offer = await Offer.findById(id);
-
-    //cheak for valid id
-    if(Object.keys(offer).length === 0){
-        throw new Error("Invalid Id");
-    }
-
-    res.render("offers/update.ejs",offer);
+    res.status(200).json({ message: "Company deleted successfully" });
 }));
 
-//delete route
-router.delete("/:id",wrapAsync( async (req,res)=>{
-    let {id} = req.params;
-    let deletedOffer = await Offer.findByIdAndDelete(id);
-    console.log(deletedOffer);
-
-    res.status(200).json({message : "Offer deleted sucessfully"});
-}));
-
-module.exports = router
+module.exports = router;
