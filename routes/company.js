@@ -21,6 +21,7 @@ const storage = new CloudinaryStorage({
     params: {
         folder: 'ScetTnP',
         allowedFormats: ['jpg', 'jpeg', 'png'],
+        transformation: [{ width: 500, height: 500, crop: 'limit' }] // Optional transformations
     },
 });
 const upload = multer({ storage });
@@ -38,17 +39,15 @@ router.post("/", upload.single('Logo'), wrapAsync(async (req, res) => {
     }
 
     let companyData = req.body;
-    let company = await Company.findOne({ name: companyData.CompanyName });
-    if (company) {
-        let err = new Error("Company already exists");
-        err.status = 400;
-        throw err;
+    let existingCompany = await Company.findOne({ name: companyData.CompanyName });
+    if (existingCompany) {
+        return res.status(400).json({ message: "Company already exists" });
     }
 
     const newCompany = new Company({
         name: companyData.CompanyName,
         logo: {
-            link: req.file.path,
+            link: req.file.path, // Cloudinary URL
             file_name: req.file.filename
         },
         link: companyData.Link,
@@ -61,7 +60,7 @@ router.post("/", upload.single('Logo'), wrapAsync(async (req, res) => {
     });
 
     await newCompany.save();
-    res.status(200).json({ message: "New company saved" });
+    res.status(201).json({ message: "New company saved" });
 }));
 
 // Show Route
@@ -69,9 +68,7 @@ router.get("/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let company = await Company.findById(id).populate('offers');
     if (!company) {
-        let err = new Error("Company not found...");
-        err.status = 404;
-        throw err;
+        return res.status(404).json({ message: "Company not found" });
     }
     res.status(200).json(company);
 }));
@@ -83,13 +80,12 @@ router.patch("/:id", wrapAsync(async (req, res) => {
 
     let company = await Company.findById(id);
     if (!company) {
-        let err = new Error("Company not found...");
-        err.status = 404;
-        throw err;
+        return res.status(404).json({ message: "Company not found" });
     }
 
-    await Company.findByIdAndUpdate(id, { $set: updateData }, { new: true });
-    res.status(200).json({ message: "Company updated successfully" });
+    // Make sure to only update fields provided
+    let updatedCompany = await Company.findByIdAndUpdate(id, { $set: updateData }, { new: true });
+    res.status(200).json({ message: "Company updated successfully", updatedCompany });
 }));
 
 // Delete Route
@@ -97,9 +93,7 @@ router.delete("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedCompany = await Company.findByIdAndDelete(id);
     if (!deletedCompany) {
-        let err = new Error("Company not found...");
-        err.status = 404;
-        throw err;
+        return res.status(404).json({ message: "Company not found" });
     }
     res.status(200).json({ message: "Company deleted successfully" });
 }));
