@@ -90,7 +90,6 @@ router.patch("/:id",async (req,res)=>{
     //sending a completed signals
     res.status(200).json({message : "Data updated successfully "});
     
-    
 });
 
 

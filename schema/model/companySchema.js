@@ -1,6 +1,7 @@
 const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
 const Offer = require("./offerSchema.js");
+const { fileLoader } = require("ejs");
 
 
 
@@ -9,7 +10,10 @@ const companySchema = mongoose.Schema({
         type : String
     },
     logo : {
-        type : String
+        type : {
+            link : String,
+            file_name : String
+        }
     },
     link : {
         type : String

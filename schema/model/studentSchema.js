@@ -69,7 +69,7 @@ const studentSchema = mongoose.Schema({
         type : mongoose.Schema.ObjectId,
         ref : 'Offer'
     }],
-    selected : [{
+    selected : {
         type : {
             offer:{
                 type:mongoose.Schema.ObjectId,
@@ -79,7 +79,7 @@ const studentSchema = mongoose.Schema({
                 type : Number,
             }
         }
-    }]
+    }
 
 });
 

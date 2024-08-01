@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const mongoose = require("mongoose");
-const Student = require("../../modules/studentSchema.js");
+const Student = require("../../schema/model/studentSchema.js");
 
 
 
@@ -61,7 +61,7 @@ const data =`[
             }
         },
         "applied": ["64c3c32f1d1c1f29f2e80b94", "64c3c3541d1c1f29f2e80b95"],
-        "selected": [{"offer":"64c3c32f1d1c1f29f2e80b94","salary":100000}]
+        "selected": {"offer":"64c3c32f1d1c1f29f2e80b94","salary":100000}
     },
     {
         "_id": "64c3c3e91d1c1f29f2e80b98",
@@ -98,8 +98,7 @@ const data =`[
                 "passing_year": 2026
             }
         },
-        "applied": ["64c3c3791d1c1f29f2e80b96"],
-        "selected": []
+        "applied": ["64c3c3791d1c1f29f2e80b96"]
     }
 ]
 `;
