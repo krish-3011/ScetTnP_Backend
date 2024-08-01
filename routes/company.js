@@ -21,7 +21,7 @@ cloudinary.config({
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-      folder: 'ScetTnp', // folder name in your Cloudinary
+      folder: 'ScetTnP', // folder name in your Cloudinary
       allowedFormats : ['jpg', 'jpeg', 'png'], // format of the uploaded file
     },
   });
