@@ -4,8 +4,7 @@ const Offer = require("./offerSchema.js");
 // Define the company schema
 const companySchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true,
+        type: String
     },
     logo: {
         link: String,

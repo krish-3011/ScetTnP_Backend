@@ -8,16 +8,8 @@ const wrapAsync = require("../utils/wrapAsync.js");
 
 // Enable CORS
 router.use(cors({
-    origin: 'https://scettnp-frontend.onrender.com', // Specify your frontend origin
+    origin: ['https://scettnp-frontend.onrender.com','http://localhost:3000'], // Specify your frontend origin
     credentials: true // Allow cookies to be sent with requests
-}));
-
-// Configure session middleware
-router.use(session({
-    secret: 'Scettt',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false } // Set secure to true if using HTTPS
 }));
 
 // Authenticate user
