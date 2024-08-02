@@ -3,6 +3,7 @@ const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const companyFun = require("../controllers/compnay.js")
 const {storage} = require("../utils/cloudinary.js")
+const multer = require("multer");
 const upload = multer({ storage })
 
 // Index Route
