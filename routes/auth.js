@@ -26,7 +26,6 @@ router.post("/", wrapAsync(async (req, res) => {
     birthDate = new Date(birthDate);
 
     if (profile.birth_date.toISOString().slice(0, 10) === birthDate.toISOString().slice(0, 10)) {
-        req.session.user = profile; // Store user in session
         res.status(200).json(profile);
     } else {
         res.status(401).json({ message: "Wrong credentials" });
