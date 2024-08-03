@@ -1,0 +1,16 @@
+const mongoose = require("mongoose");
+const Offer = require("./offerSchema.js");
+
+// Define the company schema
+const notificationSchema = new mongoose.Schema({
+    sender : {
+        type : String
+    },
+    message : { 
+        type : String
+    }
+});
+
+// Create the Company model
+const Notification = mongoose.model("Notification", notificationSchema);
+module.exports = Company;

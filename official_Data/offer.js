@@ -50,8 +50,18 @@ async function addData(dataSet) {
                 }
             }
 
-            if(data.sector !== "IT" || data.sector !== "Managment" ){
-                data.sector = "core"
+            // if(data.sector !== "IT" || data.sector !== "Managment" ){
+            //     data.sector = "core"
+            // }
+            let no = Math.floor(Math.random() * 3);
+            if(no === 0){
+                data.sector = "core";
+            }
+            if(no === 1){
+                data.sector = "IT";
+            }
+            if(no === 2){
+                data.sector = "managment";
             }
 
             let formatDateString = (dateString) => {

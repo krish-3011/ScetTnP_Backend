@@ -16,7 +16,7 @@ router.get("/home",async (req,res,next) => {
 
     //geeting addmission year of student for enrollment no
     if(req.query.year){
-        year = Number(req.query.year.slice(5)) - 4;
+        year = Number(req.query.year.slice(5)) - 3;
     }
 
     let enrollment_no = `ET${year}BT${dept}.{3}`;
