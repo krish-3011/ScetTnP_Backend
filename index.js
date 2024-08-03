@@ -26,11 +26,11 @@ async function main() {
 }
 main().then(() => console.log("Database connected")).catch(err => console.log(`Error in connecting to database: ${err}`));
 
-// Middleware
-app.use(cors({
-    origin: ['https://scettnp-frontend.onrender.com','http://localhost:3000'], // Specify your frontend origin
-    credentials: true // Allow cookies to be sent with requests
-}));
+// // Middleware
+// app.use(cors({
+//     origin: ['https://scettnp-frontend.onrender.com','http://localhost:3000'], // Specify your frontend origin
+//     credentials: true // Allow cookies to be sent with requests
+// }));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
 const xlsx = require("xlsx");
+const moment = require("moment");
 
 // connecting database
 async function main() {
@@ -54,19 +55,13 @@ async function addData(dataSet) {
             }
 
             let formatDateString = (dateString) => {
-                let date = new Date(dateString);
-                if (!isNaN(date)) {
-                    let year = date.getFullYear();
-                    let month = (date.getMonth() + 1).toString().padStart(2, '0');
-                    let day = date.getDate().toString().padStart(2, '0');
-                    return `${year}-${month}-${day}`;
-                } else {
-                    return null;
-                }
+                // Parse the date string using Moment.js
+                let parsedDate = moment(dateString, 'DD-MM-YYYY');
+                return parsedDate.isValid() ? parsedDate.toDate() : null;
             };
 
-            data.last_date_for_apply = formatDateString(data.last_date_for_apply);
-            data.interview_date = formatDateString(data.interview_date);
+            data.last_date_for_apply = formatDateString(data.__EMPTY);
+            data.interview_date = formatDateString(data.__EMPTY_1);
             if(company){
             let newOffer = new Offer({
                 role : data.role,
@@ -86,12 +81,14 @@ async function addData(dataSet) {
 
             await newOffer.save();
             console.log(`Data ${c} inserted`);
+            c += 1;
         }
             
 
         } catch (err) {
             console.log(`Error inserting data ${c}:`, err);
-        }
-        c += 1;
+        
+        
+    }
     }
 }

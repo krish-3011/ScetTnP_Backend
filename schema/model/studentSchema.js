@@ -49,7 +49,7 @@ const studentSchema = mongoose.Schema({
                 type : {
                     percentage : Number,
                     semwise_result : [Number],
-                    backlog : [Number],
+                    backlog : Number,
                     passing_year : Number
                     
                 },
@@ -58,7 +58,7 @@ const studentSchema = mongoose.Schema({
                 type : {
                     percentage : Number,
                     semwise_result : [Number],
-                    backlog : [Number],
+                    backlog : Number,
                     passing_year : Number
                     
                 },

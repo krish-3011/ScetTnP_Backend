@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const mongoose = require("mongoose");
-const Company = require("../../modules/companySchema.js");
+const Company = require("../../schema/model/companySchema.js");
+
 
 //Starting Server
 app.listen(port , ()=>{
