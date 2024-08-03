@@ -25,7 +25,7 @@ router.get("/home",async (req,res,next) => {
     let students = await Student.find({enrollment_no :{$regex : enrollment_no}});
     if(students.length > 0){
         for(let student of students){
-            if(student.applied.length > 0 || student.selected.length > 0){
+            if(student.applied.length > 0 || student.selected){
                 statObj.intrested += 1;
             }
             if(student.selected){
