@@ -13,19 +13,17 @@ router.get("/",async (req,res) => {
 router.get("/home",async (req,res,next) => {
     //get filter
     let {year = ".{2}" , dept = ".{2}"} = req.query;
-    console.log(req.query.year.slice(0,5));
     //geeting addmission year of student for enrollment no
     if(req.query.year){
         year = Number(req.query.year.slice(0,4)) - 4;
         year = Number(year.toString().slice(2,4));
     }
 
-    console.log(year)
     let enrollment_no = `ET${year}BT${dept}.{3}`;
 
     let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { core : {} , IT : {} , managment : {}}};
     let students = await Student.find({enrollment_no :{$regex : enrollment_no}});
-    console.log(students);
+
     if(students.length > 0){
         for(let student of students){
             if(student.applied.length > 0 || student.selected){
