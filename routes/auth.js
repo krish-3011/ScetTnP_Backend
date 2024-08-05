@@ -17,7 +17,7 @@ router.use(cors({
 router.post("/", wrapAsync(async (req, res) => {
     let { enrollmentNo, birthDate } = req.body;
 
-    let student = await Student.find({enrollment_no : enrollmentNo}).populate('applied').populate('selected');
+    let profile = await Student.find({enrollment_no : enrollmentNo}).populate('applied').populate('selected');
     if (!profile) {
         return res.status(404).json({ message: "Student not found" });
     }
