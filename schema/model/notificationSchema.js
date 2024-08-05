@@ -13,4 +13,4 @@ const notificationSchema = new mongoose.Schema({
 
 // Create the Company model
 const Notification = mongoose.model("Notification", notificationSchema);
-module.exports = Company;
+module.exports = Notification;
