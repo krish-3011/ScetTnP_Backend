@@ -1,4 +1,5 @@
 const Notificaton = require("../schema/model/notificationSchema.js");
+const sendMessage = require("./sendMessage.js")
 
 const indexRoute = async (req, res) => {
     let notification = await Notificaton.find({});
@@ -15,7 +16,8 @@ const newRoute = async (req, res) => {
     });
 
     await notification.save();
-    res.status(201).json({ message: "New company saved" });
+    sendMessage.sendMessage(`new notification arrived :   ${notificationData.message}`)
+    res.status(201).json({ message: "New Notification saved" });
 };
 
 const showRoute = async (req, res, next) => {

@@ -17,24 +17,22 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-async function main(req, res) {
+async function sendMessage(message) {
     const mail = {
         from: mailId,
         to: 'mannpatel.co22d2@scet.ac.in',
-        subject: "Testing Nodemailer",
-        text: "SCET TnP 2024",
+        subject: "New Notification arrived",
+        text: message,
     };
 
     try {
         const response = await transporter.sendMail(mail);
-        console.log(response);
-        res.status(200).send('Email sent successfully: ' + response.response);
+        return response
     } catch (error) {
         console.error('Error sending email:', error);
-        res.status(500).send('Error sending email: ' + error.message);
+        
     }
 }
 
-router.get("/", main);
 
-module.exports = router;
+module.exports = sendMessage;
