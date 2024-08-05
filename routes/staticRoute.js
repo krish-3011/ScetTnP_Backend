@@ -20,7 +20,6 @@ router.get("/home",async (req,res,next) => {
     }
 
     let enrollment_no = `ET${year}BT${dept}.{3}`;
-    console.log(year);
     let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { core : {} , IT : {} , managment : {}}};
     let students = await Student.find({enrollment_no :{$regex : enrollment_no}});
 
