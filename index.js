@@ -7,6 +7,8 @@ const offer = require("./routes/offer.js");
 const user = require("./routes/user.js");
 const auth = require("./routes/auth.js");
 const company = require("./routes/company.js");
+const notification = require("./routes/notification.js");
+const message = require('./controllers/sendMessage.js')
 const methodOverride = require("method-override");
 const wrapAsync = require("./utils/wrapAsync.js");
 const cors = require("cors");
@@ -46,7 +48,8 @@ app.use("/offers", offer);
 app.use("/user", user);
 app.use("/auth", auth);
 app.use("/company", company);
-
+app.use("/notification",notification);
+app.use("/message",message);
 
 // Error handling
 app.use((err, req, res, next) => {

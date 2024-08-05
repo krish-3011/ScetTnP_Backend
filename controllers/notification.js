@@ -10,7 +10,7 @@ const newRoute = async (req, res) => {
     let notificationData = req.body;
     
     const notification = new Notificaton({
-        sender : notificationData.sender,
+        // sender : notificationData.sender,
         message : notificationData.message
     });
 
