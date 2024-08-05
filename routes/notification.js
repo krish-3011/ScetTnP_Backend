@@ -5,21 +5,21 @@ const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
-const offerFun = require("../controllers/offer.js")
+const notificationFun = require("../controllers/notification.js")
 
 //Index Route
-router.get("/",wrapAsync(offerFun.indexRoute));
+router.get("/",wrapAsync(notificationFun.indexRoute));
 
 //new Route
-router.post("/",wrapAsync(offerFun.newRoute));
+router.post("/",wrapAsync(notificationFun.newRoute));
 
 //show Route
-router.get("/:id",wrapAsync(offerFun.showRoute));
+router.get("/:id",wrapAsync(notificationFun.showRoute));
 
 //update Route
-router.patch("/:id",wrapAsync(offerFun.updateRoute));
+router.patch("/:id",wrapAsync(notificationFun.updateRoute));
 
 //delete route
-router.delete("/:id",wrapAsync(offerFun.deleteRoute));
+router.delete("/:id",wrapAsync(notificationFun.deleteRoute));
 
 module.exports = router

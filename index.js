@@ -44,11 +44,11 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // Routers
 app.use("/", staticRouter);
-app.use("/notification",notification);
 app.use("/offers", offer);
 app.use("/user", user);
 app.use("/auth", auth);
 app.use("/company", company);
+app.use("/notification",notification);
 app.use("/message",message);
 
 // Error handling
