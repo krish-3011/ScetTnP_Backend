@@ -22,7 +22,7 @@ const showRoute= async (req,res,next)=>{
     let {enrollNo} = req.params
 
     //finding offer in DB
-    let student = await Student.find({enrollment_no : enrollNo}).populate('applied');
+    let student = await Student.find({enrollment_no : enrollNo}).populate('applied').populate('selected');
 
     //chacking valid id
     if(student){
