@@ -17,7 +17,11 @@ const newRoute = async (req, res) => {
     });
 
     await notification.save();
-    sendMessage(notificationData)
+    sendMessage({
+        // sender : notificationData.sender,
+        message : notificationData.message,
+        attachments : {filename : req.file.filename , path : req.file.path}
+    })
     res.status(201).json({ message: "New Notification saved" });
 };
 

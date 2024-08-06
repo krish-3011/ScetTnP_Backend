@@ -23,7 +23,7 @@ async function sendMessage(notificationData) {
         to: 'mannpatel.co22d2@scet.ac.in',
         subject: "New Notification arrived",
         text: notificationData.message,
-        attachments: [notificationData.attachments]
+        attachments: notificationData.attachments
     };
 
     try {
