@@ -14,44 +14,37 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'ScetTnP',
-        allowed_formats: ['jpg', 'jpeg', 'png'],
-        transformation: [{ width: 500, height: 500, crop: 'limit' }],
+        allowed_formats: ['jpg', 'jpeg', 'png'], // `allowed_formats` should be in snake_case
+        transformation: [{ width: 500, height: 500, crop: 'limit' }], // Optional transformations
     },
 });
 
 // Multer configuration
 const upload = multer({ storage });
 
-// Modified imageUpload function to accept field name
-const imageUpload = (fieldName) => async (req, res, next) => {
-    try {
-        if (!req.body[fieldName] || !Array.isArray(req.body[fieldName])) {
-            req.files = [];
-            return next();
-        }
+// imageUpload function
+const imageUpload = (path) => (req, res, next) => {
+    let files = [];
 
-        const uploadPromises = req.body[fieldName].map(imagePath => {
-            return new Promise((resolve, reject) => {
-                const multerUpload = upload.single(imagePath);
-                multerUpload(req, res, (err) => {
-                    if (err) {
-                        return reject(err);
-                    }
-                    if (req.file) {
-                        resolve({ filename: req.file.filename, path: req.file.path });
-                    } else {
-                        resolve(null);
-                    }
-                });
+    if (req.body[path]) {
+        req.body[path].forEach((imagePath) => {
+            upload.single(path)(req, res, (err) => {
+                if (err) {
+                    return next(err);
+                }
+
+                if (req.file) {
+                    files.push({ filename: req.file.filename, path: req.file.path });
+                }
             });
         });
 
-        req.files = (await Promise.all(uploadPromises)).filter(file => file !== null);
-        next();
-
-    } catch (error) {
-        next(error);
+        req.files = files;
+    } else {
+        req.files = [{ filename: null, path: '' }];
     }
+
+    next();
 };
 
-module.exports = { upload, imageUpload };
+module.exports = { storage, imageUpload };
