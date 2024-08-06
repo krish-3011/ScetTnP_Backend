@@ -10,7 +10,8 @@ const notificationSchema = new mongoose.Schema({
         type : String
     },
     attachments : [{
-        type : { 
+        type : {
+            filename : String , 
             path : String
         }
     }]
