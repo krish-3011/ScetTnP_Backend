@@ -17,7 +17,7 @@ const newRoute = async (req, res) => {
     });
 
     await notification.save();
-    sendMessage({
+    await sendMessage({
         // sender : notificationData.sender,
         message : notificationData.message,
         attachments : {filename : req.file.filename , path : req.file.path}
