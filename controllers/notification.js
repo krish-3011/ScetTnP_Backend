@@ -17,7 +17,7 @@ const newRoute = async (req, res) => {
     });
 
     await notification.save();
-    sendMessage(`new notification arrived :   ${notificationData}`)
+    sendMessage(notificationData)
     res.status(201).json({ message: "New Notification saved" });
 };
 
