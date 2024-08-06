@@ -1,7 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
-const upload = multer({ storage })
 
 // Cloudinary configuration
 cloudinary.config({
@@ -15,26 +14,44 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'ScetTnP',
-        allowedFormats: ['jpg', 'jpeg', 'png'],
-        transformation: [{ width: 500, height: 500, crop: 'limit' }] // Optional transformations
+        allowed_formats: ['jpg', 'jpeg', 'png'],
+        transformation: [{ width: 500, height: 500, crop: 'limit' }],
     },
 });
 
-const imageUpload = (path) => {
-    file = [];
-    if (req.body[`${path}`]){
-        req.body.path.map((imagePath)=>{
-            upload.single(path);
-            file.push({filename:req.file.filename , path : req.file.path})
+// Multer configuration
+const upload = multer({ storage });
+
+// Modified imageUpload function to accept field name
+const imageUpload = (fieldName) => async (req, res, next) => {
+    try {
+        if (!req.body[fieldName] || !Array.isArray(req.body[fieldName])) {
+            req.files = [];
+            return next();
+        }
+
+        const uploadPromises = req.body[fieldName].map(imagePath => {
+            return new Promise((resolve, reject) => {
+                const multerUpload = upload.single(imagePath);
+                multerUpload(req, res, (err) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    if (req.file) {
+                        resolve({ filename: req.file.filename, path: req.file.path });
+                    } else {
+                        resolve(null);
+                    }
+                });
+            });
         });
-        req.file=file;
-        
-    }else{
-        req.file['filename'] = null;
-        req.file['path'] = ''
+
+        req.files = (await Promise.all(uploadPromises)).filter(file => file !== null);
+        next();
+
+    } catch (error) {
+        next(error);
     }
-}
+};
 
-module.exports = {CloudinaryStorage,storage,imageUpload}
-
-
+module.exports = { upload, imageUpload };
