@@ -18,25 +18,31 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendMessage(notificationData) {
-    const mail = {
-        from: mailId,
-        to: 'mannpatel.co22d2@scet.ac.in',
-        subject: "New Notification arrived",
-        text: notificationData.message,
-        // attachments: notificationData.attachments
-        html: `
-            <p>${notificationData.message}</p>
-            <img src="${notificationData.attachments.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>
-        `
-    };
-
-    try {
-        const response = await transporter.sendMail(mail);
-        return response
-    } catch (error) {
-        console.error('Error sending email:', error);
-        
+    async function sendMessage(notificationData) {
+        // Create a dynamic HTML string for the email body
+        const attachmentsHtml = notificationData.attachments
+            .map(att => `<img src="${att.url}" alt="Notification Image" style="max-width: 100%; height: auto;"/>`)
+            .join('\n');
+    
+        const mail = {
+            from: mailId,
+            to: 'mannpatel.co22d2@scet.ac.in',
+            subject: "New Notification arrived",
+            html: `
+                <p>${notificationData.message}</p>
+                ${attachmentsHtml}
+            `
+        };
+    
+        try {
+            const response = await transporter.sendMail(mail);
+            return response;
+        } catch (error) {
+            console.error('Error sending email:', error);
+            throw error; // Re-throw the error to allow further handling if needed
+        }
     }
+    
 }
 
 
