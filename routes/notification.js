@@ -15,7 +15,7 @@ const upload = multer({ storage })
 router.get("/",wrapAsync(notificationFun.indexRoute));
 
 //new Route
-router.post("/",upload.single('Logo'),wrapAsync(notificationFun.newRoute));
+router.post("/",upload.single('attachment'),wrapAsync(notificationFun.newRoute));
 
 //show Route
 router.get("/:id",wrapAsync(notificationFun.showRoute));
