@@ -12,11 +12,12 @@ const newRoute = async (req, res) => {
     
     const notification = new Notificaton({
         // sender : notificationData.sender,
-        message : notificationData.message
+        message : notificationData.message,
+        attachments : notificationData.path 
     });
 
     await notification.save();
-    sendMessage(`new notification arrived :   ${notificationData.message}`)
+    sendMessage(`new notification arrived :   ${notificationData}`)
     res.status(201).json({ message: "New Notification saved" });
 };
 

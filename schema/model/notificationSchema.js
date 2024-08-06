@@ -3,12 +3,17 @@ const Offer = require("./offerSchema.js");
 
 // Define the company schema
 const notificationSchema = new mongoose.Schema({
-    sender : {
-        type : String
-    },
+    // sender : {
+    //     type : String
+    // },
     message : { 
         type : String
-    }
+    },
+    attachments : [{
+        type : { 
+            path : String
+        }
+    }]
 });
 
 // Create the Company model

@@ -17,12 +17,13 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-async function sendMessage(message) {
+async function sendMessage(notificationData) {
     const mail = {
         from: mailId,
         to: 'mannpatel.co22d2@scet.ac.in',
         subject: "New Notification arrived",
-        text: message,
+        text: notificationData.message,
+        attachments:notificationData.attachments
     };
 
     try {
@@ -36,3 +37,4 @@ async function sendMessage(message) {
 
 
 module.exports = sendMessage;
+
