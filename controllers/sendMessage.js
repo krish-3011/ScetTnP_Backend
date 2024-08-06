@@ -26,7 +26,7 @@ async function sendMessage(notificationData) {
         // attachments: notificationData.attachments
         html: `
             <p>${notificationData.message}</p>
-            <img src="${notificationData.imageURL}" alt="Notification Image" style="max-width: 100%; height: auto;"/>
+            <img src="${notificationData.attachment.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>
         `
     };
 
