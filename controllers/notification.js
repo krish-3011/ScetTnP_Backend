@@ -9,11 +9,12 @@ const indexRoute = async (req, res) => {
 const newRoute = async (req, res) => {
  
     let notificationData = req.body;
-    const attachments = req.files.map(file => ({
+    let attachments;
+    req.files.map(file => {
+        attachments.push({
         url: file.path,
         filename: file.originalname
-    }));
-    console.log(req.files);
+    })});
     const notification = new Notificaton({
         // sender : notificationData.sender,
         message : notificationData.message,
