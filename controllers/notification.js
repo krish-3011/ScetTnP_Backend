@@ -20,7 +20,7 @@ const newRoute = async (req, res) => {
         // sender : notificationData.sender,
         message : notificationData.message,
         attachments : req.file
-    })
+    });
     res.status(201).json({ message: "New Notification saved" });
 };
 

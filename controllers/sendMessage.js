@@ -25,7 +25,7 @@ async function sendMessage(notificationData) {
             .map(att => `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>`)
             .join('\n');
     }
-    
+        console.log(attachmentsHtml);
         const mail = {
             from: mailId,
             to: 'mannpatel.co22d2@scet.ac.in',
