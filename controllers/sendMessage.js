@@ -28,7 +28,7 @@ async function sendMessage(notificationData) {
             .join('\n');
     }
 
-        console.log(attachmentsHtml);
+        console.log(notificationData.attachments);
         const mail = {
             from: mailId,
             to: 'mannpatel.co22d2@scet.ac.in',
