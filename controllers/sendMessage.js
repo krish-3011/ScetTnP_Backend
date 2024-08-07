@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendMessage(notificationData) {
-    async function sendMessage(notificationData) {
         // Create a dynamic HTML string for the email body
         const attachmentsHtml = notificationData.attachments
             .map(att => `<img src="${att.url}" alt="Notification Image" style="max-width: 100%; height: auto;"/>`)
@@ -43,7 +42,7 @@ async function sendMessage(notificationData) {
         }
     }
     
-}
+
 
 
 module.exports = sendMessage;
