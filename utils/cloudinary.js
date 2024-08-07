@@ -24,22 +24,25 @@ const upload = multer({ storage });
 
 // imageUpload function
 const imageUpload = (path) => (req, res, next) => {
-    let files = [];
+    // let files = [];
+
+    // if (req.body[path]) {
+    //     req.body[path].forEach((imagePath) => {
+    //         upload.single(path)(req, res, (err) => {
+    //             if (err) {
+    //                 return next(err);
+    //             }
+
+    //             if (req.file) {
+    //                 files.push({ filename: req.file.filename, path: req.file.path });
+    //             }
+    //         });
+    //     });
 
     if (req.body[path]) {
-        req.body[path].forEach((imagePath) => {
-            upload.single(path)(req, res, (err) => {
-                if (err) {
-                    return next(err);
-                }
 
-                if (req.file) {
-                    files.push({ filename: req.file.filename, path: req.file.path });
-                }
-            });
-        });
-
-        req.files = files;
+    upload.array(path)(req, res, (err) => {})
+        return res.status(400).json({ message: "File upload error", error: err });
     } else {
         req.files = [{ filename: null, path: '' }];
     }

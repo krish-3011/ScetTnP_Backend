@@ -10,10 +10,15 @@ const newRoute = async (req, res) => {
 
     let notificationData = req.body;
     console.log(notificationData)
+    const attachments = req.files.map(file => ({
+        url: file.path,
+        filename: file.originalname
+    }));
+
     const notification = new Notificaton({
         // sender : notificationData.sender,
         message : notificationData.message,
-        attachments : req.file
+        attachments : attachments
     });
 
     await notification.save();
