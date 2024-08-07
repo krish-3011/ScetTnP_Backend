@@ -8,7 +8,7 @@ const indexRoute = async (req, res) => {
 
 const newRoute = async (req, res) => {
 
-    let {formData} = req.body;
+    let formData = req.body;
     console.log(formData)
     const notification = new Notificaton({
         // sender : notificationData.sender,
