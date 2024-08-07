@@ -5,19 +5,20 @@ const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const object = require("../utils/functions/Object.js");
-const offerFun = require("../controllers/offer.js")
+const offerFun = require("../controllers/offer.js");
+const validateOfferSchema = require('../schema/joi/offerValidationSchema.js')
 
 //Index Route
 router.get("/",wrapAsync(offerFun.indexRoute));
 
 //new Route
-router.post("/",wrapAsync(offerFun.newRoute));
+router.post("/",validateOfferSchema,wrapAsync(offerFun.newRoute));
 
 //show Route
 router.get("/:id",wrapAsync(offerFun.showRoute));
 
 //update Route
-router.patch("/:id",wrapAsync(offerFun.updateRoute));
+router.patch("/:id",validateOfferSchema,wrapAsync(offerFun.updateRoute));
 
 //delete route
 router.delete("/:id",wrapAsync(offerFun.deleteRoute));

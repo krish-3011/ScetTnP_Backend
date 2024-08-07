@@ -1,6 +1,7 @@
 const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
 const object = require("../utils/functions/Object.js");
+const Student = require("../schema/model/studentSchema.js");
 
 const indexRoute = async (req,res)=>{
 
@@ -29,12 +30,15 @@ const newRoute = async (req,res)=> {
 
     //getting companies id
     let company = await Company.findOne({name : offer.companyName});
+
+    //If company not present 
     if(!company){
         let err = new Error("company not exsist !! please register company first .")
         err.status = 400
         throw err;
     }
     
+    //creating instance of Offer model
     const newOffer = new Offer({
         role : offer.title,
         type : offer.type,
@@ -45,9 +49,13 @@ const newRoute = async (req,res)=> {
         company : company._id,
     });
 
+    //adding offer to database
     const savedOffer = await newOffer.save();
     
+    //updating offer fild in compnay collection
     company.offers.push(savedOffer._id);
+
+    //update in Company collectin in database
     Company.findByIdAndUpdate(company._id,{$set :{offers : company.offers}});
 
     res.status(200).json({message : "new user saved"});
@@ -58,10 +66,10 @@ const showRoute = async (req,res,next)=>{
     //retriving offer is from url
     let {id} = req.params
 
-    //finding offer in DB
+    //finding offer in database
     let offer = await Offer.findById(id);
 
-    //chacking valid id
+    //If offer idis invalid
     if(!offer){
         let err = new Error("Offer not exsist")
         err.status = 400
@@ -75,17 +83,18 @@ const showRoute = async (req,res,next)=>{
 const updateRoute = async (req,res)=>{
 
     //retriving data from request body
-    let {id,title,location,type,salary,last_date, ...criteria} = req.body
+    offer = req.body;
+    // let {id,title,location,type,salary,last_date, ...criteria} = req.body -> for frontend
 
     //criteria : {criteria : {} }
     //simplifying obj -> criteria : {}
-    criteria = criteria.criteria;
+    offer.criteria = offer.criteria.criteria;
 
     // if criteria having a array of data , it is in string
     //retrive in form of array
-    for (cri in criteria){
-        if(criteria[cri].includes(",")){
-            criteria.criteria[cri] = criteria.criteria[cri].split(",");
+    for (cri in offer.criteria){
+        if(offer.criteria[cri].includes(",")){
+            offer.criteria.criteria[cri] = offer.criteria.criteria[cri].split(",");
         }
     }
 
@@ -109,9 +118,56 @@ const updateRoute = async (req,res)=>{
 }
 
 const deleteRoute = async (req,res)=>{
+    //retriving id from query
     let {id} = req.params;
+
+    //deleting offer
     let deletedOffer = await Offer.findByIdAndDelete(id);
     console.log(deletedOffer);
+
+    //retriving company of deleted offer
+    let compnayId = deletedOffer.company;
+    let company = await Company.findById(compnayId);
+
+    //removing deleted offer id from offer fild in company collection
+    company.offers = company.offers.filter(offId => offId !== id );
+
+    //updating in db
+    await Company.findByIdAndUpdate(compnayId,{$set:{offers : company.offers}});
+
+    //retriving applicants details form deleted offer
+    let applicantsId = deletedOffer.applicants;
+
+    //itrating over all applicants
+    for(let applicantId in applicantsId){
+
+        //retriving details of student form database
+        let student = await Student.findById(applicantId);
+
+        //removing deleted offer id from applied fild in student collection
+        student.applied = student.applied.filter(offerId => offerId !== id);
+
+        //updating student in data base
+        await Student.findByIdAndUpdate(applicantId , {$set : {applied : student.applied}});
+    }
+
+    //retriving applicants details form deleted offer
+    let selectedId = deletedOffer.selected;
+
+    //itrating over all applicants
+    for(let selectId in selectedId){
+
+        //retriving details of student form database
+        let student = await Student.findById(selectId);
+
+        //removing deleted offer id from applied fild in student collection
+        student.applied = student.applied.filter(offerId => offerId !== id);
+
+        //updating student in data base
+        await Student.findByIdAndUpdate(selectId , {$set : {applied : student.applied}});
+    }
+
+
 
     res.status(200).json({message : "Offer deleted sucessfully"});
 }

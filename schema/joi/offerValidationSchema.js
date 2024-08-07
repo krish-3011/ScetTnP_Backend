@@ -55,4 +55,20 @@ const offerValidationSchema = Joi.object({
 
 });
 
-module.exports = offerValidationSchema;
+const validateOfferSchema = async (req,res) =>{
+     //retriving data from request body
+     let offer = req.body;
+
+     //adding formate to criteria
+     offer.criteria = offer.criteria.split("\r\n");
+     criteria=offer.criteria;
+     offer.criteria={};
+     for(cri of criteria){
+         cri=cri.split(":");
+         offer.criteria[cri[0]] = cri[1];
+     }
+
+    offerValidationSchema.validate(offer);
+}
+
+module.exports = validateOfferSchema;
