@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
-const axios = require('axios')
+const axios = require('axios');
+const { attachment } = require('express/lib/response');
 
 dotenv.config();
 const mailId = process.env.EMAIL_ID;
@@ -20,7 +21,7 @@ const transporter = nodemailer.createTransport({
 async function sendMessage(notificationData) {
         // Initialize the HTML string for attachments
     let attachmentsHtml = '';
-    console.log(`notificationData.attachments : ${notificationData.attachments}`);
+    // console.log(`notificationData.attachments : ${notificationData.attachments}`);
     // Check if there are attachments and they have the correct structure
     if (notificationData.attachments && Array.isArray(notificationData.attachments)) {
         attachmentsHtml =  notificationData.attachments
@@ -35,7 +36,8 @@ async function sendMessage(notificationData) {
             html: `
                 <p>${notificationData.message}</p>
                 ${attachmentsHtml}
-            `
+            `,
+            attachments : notificationData.attachments
         };
     
         try {
