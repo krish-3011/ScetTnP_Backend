@@ -7,14 +7,13 @@ const indexRoute = async (req, res) => {
 };
 
 const newRoute = async (req, res) => {
-
+ 
     let notificationData = req.body;
-    console.dir(notificationData)
     const attachments = req.files.map(file => ({
         url: file.path,
         filename: file.originalname
     }));
-
+    console.log(attachments);
     const notification = new Notificaton({
         // sender : notificationData.sender,
         message : notificationData.message,
