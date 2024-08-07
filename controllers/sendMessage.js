@@ -23,9 +23,9 @@ async function sendMessage(notificationData) {
 
     // Check if there are attachments and they have the correct structure
     if (notificationData.attachments && Array.isArray(notificationData.attachments)) {
-        attachmentsHtml = notificationData.attachments
-            .map(att => att.path ? `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>` : '')
-            .join('\n');
+        attachmentsHtml = attachmentsHtml
+            .join(notificationData.attachments
+                .map(att => att.path ? `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>` : ''));
     }
 
         console.log(notificationData.attachments);
