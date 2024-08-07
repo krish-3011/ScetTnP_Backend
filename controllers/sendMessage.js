@@ -18,35 +18,45 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendMessage(notificationData) {
-        // Initialize the HTML string for attachments
+    // Initialize the attachments array for the email
+    let attachments = [];
     let attachmentsHtml = '';
 
     // Check if there are attachments and they have the correct structure
     if (notificationData.attachments && Array.isArray(notificationData.attachments)) {
-        attachmentsHtml = attachmentsHtml
-            .join(notificationData.attachments
-                .map(att => att.path ? `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>` : ''));
+        attachments = notificationData.attachments.map((att, index) => {
+            return {
+                filename: att.filename || `image${index}.png`,
+                path: att.path,
+                cid: `image${index}` // unique identifier for the embedded image
+            };
+        });
+
+        attachmentsHtml = attachments
+            .map((att, index) => `<img src="cid:image${index}" alt="Notification Image" style="max-width: 100%; height: auto;"/>`)
+            .join('\n');
     }
 
-        console.log(notificationData.attachments);
-        const mail = {
-            from: mailId,
-            to: 'mannpatel.co22d2@scet.ac.in',
-            subject: "New Notification arrived",
-            html: `
-                <p>${notificationData.message}</p>
-                ${attachmentsHtml}
-            `
-        };
-    
-        try {
-            const response = await transporter.sendMail(mail);
-            return response;
-        } catch (error) {
-            console.error('Error sending email:', error);
-            throw error; // Re-throw the error to allow further handling if needed
-        }
+    const mail = {
+        from: mailId,
+        to: 'mannpatel.co22d2@scet.ac.in',
+        subject: "New Notification arrived",
+        html: `
+            <p>${notificationData.message}</p>
+            ${attachmentsHtml}
+        `,
+        attachments: attachments
+    };
+
+    try {
+        const response = await transporter.sendMail(mail);
+        return response;
+    } catch (error) {
+        console.error('Error sending email:', error);
+        throw error; // Re-throw the error to allow further handling if needed
     }
+}
+
     
 
 
