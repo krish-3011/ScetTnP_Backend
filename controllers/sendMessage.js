@@ -20,12 +20,11 @@ const transporter = nodemailer.createTransport({
 async function sendMessage(notificationData) {
         // Initialize the HTML string for attachments
     let attachmentsHtml = '';
-    console.log(notificationData.attachments)
+    console.log(`notificationData.attachments : ${notificationData.attachments}`);
     // Check if there are attachments and they have the correct structure
     if (notificationData.attachments && Array.isArray(notificationData.attachments)) {
-        attachmentsHtml = attachmentsHtml
-            .join(notificationData.attachments
-                .map(att => att.path ? `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>` : ''));
+        attachmentsHtml =  notificationData.attachments
+                .map(att => att.path ? `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>` : '').join('\n');
     }
 
         console.log(notificationData.attachments);
