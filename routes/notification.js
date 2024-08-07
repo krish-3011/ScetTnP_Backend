@@ -14,7 +14,7 @@ const {storage,imageUpload} = require("../utils/cloudinary.js")
 router.get("/",wrapAsync(notificationFun.indexRoute));
 
 //new Route
-router.post("/",imageUpload('attachment'),wrapAsync(notificationFun.newRoute));
+router.post("/",imageUpload('attachments'),wrapAsync(notificationFun.newRoute));
 
 //show Route
 router.get("/:id",wrapAsync(notificationFun.showRoute));
