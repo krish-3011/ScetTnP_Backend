@@ -13,7 +13,7 @@ const newRoute = async (req, res) => {
         url: file.path,
         filename: file.originalname
     }));
-    console.log(attachments);
+    console.log(req.files);
     const notification = new Notificaton({
         // sender : notificationData.sender,
         message : notificationData.message,
