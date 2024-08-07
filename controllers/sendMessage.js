@@ -35,7 +35,6 @@ async function sendMessage(notificationData) {
             subject: "New Notification arrived",
             html: `
                 <p>${notificationData.message}</p>
-                ${attachmentsHtml}
             `,
             attachments : notificationData.attachments
         };
