@@ -18,13 +18,16 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendMessage(notificationData) {
-        // Create a dynamic HTML string for the email body
-        let attachmentsHtml = '';
-        if(notificationData.attachments){
-            attachmentsHtml = notificationData.attachments
-                .map(att => `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>`)
-                .join('\n');
-        }
+        // Initialize the HTML string for attachments
+    let attachmentsHtml = '';
+
+    // Check if there are attachments and they have the correct structure
+    if (notificationData.attachments && Array.isArray(notificationData.attachments)) {
+        attachmentsHtml = notificationData.attachments
+            .map(att => att.path ? `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>` : '')
+            .join('\n');
+    }
+
         console.log(attachmentsHtml);
         const mail = {
             from: mailId,
