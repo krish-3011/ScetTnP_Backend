@@ -22,7 +22,7 @@ async function sendMessage(notificationData) {
         let attachmentsHtml;
     if(notificationData.attachments){
         attachmentsHtml = notificationData.attachments
-            .map(att => `<img src="${att.url}" alt="Notification Image" style="max-width: 100%; height: auto;"/>`)
+            .map(att => `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>`)
             .join('\n');
     }
     
