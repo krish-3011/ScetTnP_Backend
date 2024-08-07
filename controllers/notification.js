@@ -8,18 +8,18 @@ const indexRoute = async (req, res) => {
 
 const newRoute = async (req, res) => {
 
-    let notificationData = req.body;
-    console.log(notificationData)
+    let {formData} = req.body;
+    console.log(formData)
     const notification = new Notificaton({
         // sender : notificationData.sender,
-        message : notificationData.message,
+        message : formData.message,
         attachments : req.file
     });
 
     await notification.save();
     await sendMessage({
         // sender : notificationData.sender,
-        message : notificationData.message,
+        message : formData.message,
         attachments : req.file
     })
     res.status(201).json({ message: "New Notification saved" });
