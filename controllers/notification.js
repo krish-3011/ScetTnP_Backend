@@ -9,7 +9,7 @@ const indexRoute = async (req, res) => {
 const newRoute = async (req, res) => {
 
     let notificationData = req.body;
-    
+    console.log(notificationData)
     const notification = new Notificaton({
         // sender : notificationData.sender,
         message : notificationData.message,
