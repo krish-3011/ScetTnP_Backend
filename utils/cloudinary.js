@@ -24,30 +24,26 @@ const upload = multer({ storage });
 
 // imageUpload function
 const imageUpload = (path) => (req, res, next) => {
-    // let files = [];
+    // Use Multer middleware to handle file uploads
+    upload.array(path)(req, res, (err) => {
+        if (err) {
+            // Handle errors during file upload
+            return res.status(400).json({ message: "File upload error", error: err });
+        }
+        
+        // Ensure `req.files` is populated with the uploaded files
+        if (req.files) {
+            req.files = req.files.map(file => ({
+                filename: file.filename,
+                path: file.path
+            }));
+        } else {
+            req.files = []; // No files uploaded
+        }
 
-    // if (req.body[path]) {
-    //     req.body[path].forEach((imagePath) => {
-    //         upload.single(path)(req, res, (err) => {
-    //             if (err) {
-    //                 return next(err);
-    //             }
-
-    //             if (req.file) {
-    //                 files.push({ filename: req.file.filename, path: req.file.path });
-    //             }
-    //         });
-    //     });
-
-    if (req.body[path]) {
-
-    upload.array(path)(req, res, (err) => {})
-        return res.status(400).json({ message: "File upload error", error: err });
-    } else {
-        req.files = [{ filename: null, path: '' }];
-    }
-
-    next();
+        // Proceed to the next middleware or route handler
+        next();
+    });
 };
 
 module.exports = { storage, imageUpload };

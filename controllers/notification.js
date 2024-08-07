@@ -9,7 +9,7 @@ const indexRoute = async (req, res) => {
 const newRoute = async (req, res) => {
 
     let notificationData = req.body;
-    console.log(notificationData)
+    console.dir(notificationData)
     const attachments = req.files.map(file => ({
         url: file.path,
         filename: file.originalname
