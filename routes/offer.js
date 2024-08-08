@@ -21,7 +21,7 @@ router.patch('/:id/apply',wrapAsync(offerFun.newRoute));
 router.get("/:id",wrapAsync(offerFun.showRoute));
 
 //update Route
-router.patch("/:id",validateOfferSchema,wrapAsync(offerFun.updateRoute));
+router.patch("/:id",wrapAsync(offerFun.updateRoute));
 
 //delete route
 router.delete("/:id",wrapAsync(offerFun.deleteRoute));
