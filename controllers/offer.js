@@ -172,4 +172,35 @@ const deleteRoute = async (req,res)=>{
     res.status(200).json({message : "Offer deleted sucessfully"});
 }
 
-module.exports = {indexRoute , newRoute , showRoute , updateRoute , deleteRoute}
+const applyRoute = async(req,res)=>{
+    //retriving offer id from url
+    let {id} = req.params;
+
+    // retriving data of offer
+    let offer = await Offer.findById(id);
+
+    //If offer idis invalid
+    if(!offer){
+        let err = new Error("Offer not exsist")
+        err.status = 400
+        throw err;
+    }
+
+    //retriving student data from req body
+    let student = req.body;
+
+    //adding offer in applicants
+    student.applied ? student.applied.push(id) : student.applied = [id];
+
+    //updating student in database
+    await Student.findByIdAndUpdate(student._id , {$set : {applied : student.applied}});
+    
+    //adding applicant in offer
+    offer.applicants ? offer.applicants.push(student._id) : offer.applicants = [student._id];
+
+    //updating offer in database
+    await Offer.findByIdAndUpdate(id , {$set : {applicants : offer.applicants}})
+
+
+}
+module.exports = {indexRoute , newRoute , showRoute , updateRoute , deleteRoute , applyRoute}

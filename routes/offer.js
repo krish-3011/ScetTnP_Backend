@@ -14,6 +14,9 @@ router.get("/",wrapAsync(offerFun.indexRoute));
 //new Route
 router.post("/",validateOfferSchema,wrapAsync(offerFun.newRoute));
 
+//apply route
+router.patch('/:id/apply',wrapAsync(offerFun.newRoute));
+
 //show Route
 router.get("/:id",wrapAsync(offerFun.showRoute));
 
@@ -22,5 +25,7 @@ router.patch("/:id",validateOfferSchema,wrapAsync(offerFun.updateRoute));
 
 //delete route
 router.delete("/:id",wrapAsync(offerFun.deleteRoute));
+
+
 
 module.exports = router
