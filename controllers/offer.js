@@ -203,4 +203,5 @@ const applyRoute = async(req,res)=>{
 
 
 }
+
 module.exports = {indexRoute , newRoute , showRoute , updateRoute , deleteRoute , applyRoute}
