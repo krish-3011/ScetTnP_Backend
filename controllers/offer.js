@@ -84,6 +84,7 @@ const updateRoute = async (req,res)=>{
 
     //retriving data from request body
     offer = req.body;
+    console.log(offer);
     // let {id,title,location,type,salary,last_date, ...criteria} = req.body -> for frontend
 
     //criteria : {criteria : {} }
@@ -110,7 +111,7 @@ const updateRoute = async (req,res)=>{
 
     //update data
     let newOffer = await Offer.findByIdAndUpdate(id ,{$set :{title : title , location : location.split(","), type:type , salary : salary , last_date : last_date , criteria : criteria }},{ new : true}).then(console.log("data updated")).catch((err) =>{console.log("data not updated")});
-
+    console.log(newOffer);
     //sending a completed signals
     res.status(200).json({message : "Data updated successfully "});
     
