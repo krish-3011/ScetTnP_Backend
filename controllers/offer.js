@@ -83,7 +83,7 @@ const showRoute = async (req,res,next)=>{
 const updateRoute = async (req,res)=>{
 
     //retriving data from request body
-    offer = req.body;
+    let offer = req.body;
     console.log(offer);
     // let {id,title,location,type,salary,last_date, ...criteria} = req.body -> for frontend
 
@@ -100,10 +100,10 @@ const updateRoute = async (req,res)=>{
     }
 
     //finding obj from DB
-    let offer = await Offer.findById(id);
+    let offers = await Offer.findById(id);
 
     //cheak for valid offer id
-    if(!offer){
+    if(!offers){
         let err = new Error("Offer not found...")
         err.status = 400
         throw err;
