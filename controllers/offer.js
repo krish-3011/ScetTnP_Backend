@@ -67,7 +67,7 @@ const showRoute = async (req,res,next)=>{
     let {id} = req.params
 
     //finding offer in database
-    let offer = await Offer.findById(id);
+    let offer = await Offer.findById(id).populate('company');
 
     //If offer idis invalid
     if(!offer){
