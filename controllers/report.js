@@ -2,34 +2,59 @@ const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
 const Student = require("../schema/model/studentSchema.js");
 
-const indexRoute = async (req,res)=>{
-    console.log("post")
-    // Retriving Data from student
-    let filds = req.body;
+const indexRoute = async (req, res) => {
     
-    //cheaking for empty fild
-    if(!filds){
-        err = new Error("Invalid Data");
+    // Retrieving Data from student
+    let filds = req.body;
+
+    // Checking for empty fields
+    if (!filds) {
+        let err = new Error("Invalid Data");
         err.status = 400;
         throw err;
     }
 
-    
-
-    //creating enrollment pattern
-    let addYear = (filds.batch -4).toString().slice(2,4) || '^[0-9][0-9]';
+    // Creating enrollment pattern
+    let addYear = (filds.batch - 4).toString().slice(2, 4) || '^[0-9][0-9]';
     let dept = filds.dept || '^[A-Z][A-Z]';
-    let enrollmentPattern = `^ET${addYear}BT${dept}[0-9][0-9][0-9]`
-    let populateAtt = filds.placed ? filds.intrested ? '^.{2}' : 'selected' : filds.intrested ?  'applied' : '^.{2}' || '^.{2}';
-    let gender = filds.male ? filds.female ? '^.{1}'  : 'M' : filds.female ? 'F' : '^.{1}' || '^.{1}';
-    // let salaryOp = filds.salaryOprator === "<" ? $le : $ge;
-    let obj = { enrollment_no :{$regex : enrollmentPattern} , gender :{$regex : gender} , }
-    //Retriving all Data
-    let data = await Student.find(obj);
+    let enrollmentPattern = `^ET${addYear}BT${dept}[0-9][0-9][0-9]`;
+    let gender = filds.male ? filds.female ? '^.{1}' : 'M' : filds.female ? 'F' : '^.{1}' || '^.{1}';
+    
+    let matchcriteria = {
+        enrollment_no: { $regex: enrollmentPattern },
+        gender: { $regex: gender },
+    };
 
-    // console.log(`enrollment no : ${enrollmentPattern} , populate : ${populateAtt}, gender : ${gender}`);
+    // Retrieving all Data
+    let data = await Student.find(matchcriteria);
+
+    // Grouping data by 'applied' attribute
+    data = groupBy(data, 'applied');
+
+    // Sending response
     res.send(data);
 };
 
+
+const groupBy = (data, key) => {
+    return data.reduce((result, currentValue) => {
+        // Check if the current value has the specified key
+        if (currentValue[key]) {
+            currentValue[key].forEach(groupKey => {
+                // Initialize the group if it doesn't exist
+                if (!result[groupKey]) {
+                    result[groupKey] = [];
+                }
+                
+                // Add the current item to the group
+                result[groupKey].push(currentValue);
+            });
+        } else {
+            console.log("No values found for grouping");
+        }
+        
+        return result;
+    }, {});
+}
 
 module.exports = {indexRoute};
