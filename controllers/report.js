@@ -25,7 +25,12 @@ const indexRoute = async (req, res) => {
         gender: { $regex: gender },
     };
 
-    // Retrieving all Data
+    // Adding salary filter
+    if (filds.salaryAmount) {
+        let salaryOperator = filds.salaryOperator === "<" ? "$lte" : "$gte";
+        matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
+    }
+    // Retrieving all Data  
     let data = await Student.find(matchcriteria).populate('applied').populate('selected');
 
     // Grouping data by 'applied' attribute
