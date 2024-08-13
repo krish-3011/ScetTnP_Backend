@@ -14,7 +14,7 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const cors = require("cors");
 const dotEnv = require("dotenv");
 const Company = require("./schema/model/companySchema.js");
-const report = require("./routes/staticRoute.js");
+const report = require("./routes/report.js");
 
 
 dotEnv.config();
