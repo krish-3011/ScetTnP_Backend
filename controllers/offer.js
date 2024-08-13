@@ -13,7 +13,7 @@ const indexRoute = async (req,res)=>{
     
 };
 
-const newRoute = async (req,res)=> {
+const newRoute = async (req,res)=> { 
 
     //retriving data from request body
     let offer = req.body;

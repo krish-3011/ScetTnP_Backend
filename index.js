@@ -14,6 +14,7 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const cors = require("cors");
 const dotEnv = require("dotenv");
 const Company = require("./schema/model/companySchema.js");
+const report = require("./routes/staticRoute.js");
 
 
 dotEnv.config();
@@ -50,7 +51,7 @@ app.use("/auth", auth);
 app.use("/company", company);
 app.use("/notification",notification);
 app.use("/message",message);
-
+app.use("/report" , report);
 // Error handling
 app.use((err, req, res, next) => {
     res.status(err.status || 500 ).json({ message: err.message || "server error"});
