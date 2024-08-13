@@ -29,14 +29,15 @@ const indexRoute = async (req, res) => {
     let data = await Student.find(matchcriteria);
 
     // Grouping data by 'applied' attribute
-    data = groupBy(data, 'applied');
+    data = groupByDept(data);
 
     // Sending response
     res.send(data);
 };
 
 
-const groupBy = (data, key) => {
+const groupByCompany = (data) => {
+    let key = 'applied'
     return data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
         if (currentValue[key]) {
@@ -52,6 +53,45 @@ const groupBy = (data, key) => {
         } else {
             console.log("No values found for grouping");
         }
+        
+        return result;
+    }, {});
+}
+
+const groupBySalary =(data) => {
+    let key = 'salary'
+    return data.reduce((result, currentValue) => {
+        // Check if the current value has the specified key
+        if (currentValue.selected) {
+                let groupKey = currentValue.selected[key];
+                // Initialize the group if it doesn't exist
+                if (!result[groupKey]) {
+                    result[groupKey] = [];
+                }
+                
+                // Add the current item to the group
+                result[groupKey].push(currentValue);
+            
+        } else {
+            console.log("No values found for grouping");
+        }
+        
+        return result;
+    }, {});
+}
+
+const groupByDept = (data) => {
+    let key = 'salary'
+    return data.reduce((result, currentValue) => {
+        // Check if the current value has the specified key
+                let groupKey = currentValue.enrollment_no.slice(6,8);
+                // Initialize the group if it doesn't exist
+                if (!result[groupKey]) {
+                    result[groupKey] = [];
+                }
+                
+                // Add the current item to the group
+                result[groupKey].push(currentValue);
         
         return result;
     }, {});
