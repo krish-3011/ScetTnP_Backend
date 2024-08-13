@@ -26,10 +26,19 @@ const indexRoute = async (req, res) => {
     };
 
     // Retrieving all Data
-    let data = await Student.find(matchcriteria);
+    let data = await Student.find(matchcriteria).populate('applied').populate('selected');
 
     // Grouping data by 'applied' attribute
-    data = groupByDept(data);
+    switch(filds.groupBy){
+        case 'Department': data = groupByDept(data);
+                            break;
+        
+        case 'company' : data = data = groupByCompany(data);
+                        break;
+
+        case 'salary' :  data = data = groupBySalary(data);
+                        break;
+    }
 
     // Sending response
     res.send(data);
@@ -50,9 +59,7 @@ const groupByCompany = (data) => {
                 // Add the current item to the group
                 result[groupKey].push(currentValue);
             });
-        } else {
-            console.log("No values found for grouping");
-        }
+        } 
         
         return result;
     }, {});
@@ -72,8 +79,6 @@ const groupBySalary =(data) => {
                 // Add the current item to the group
                 result[groupKey].push(currentValue);
             
-        } else {
-            console.log("No values found for grouping");
         }
         
         return result;
