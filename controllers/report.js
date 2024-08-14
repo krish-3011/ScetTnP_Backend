@@ -15,8 +15,8 @@ const indexRoute = async (req, res) => {
     }
 
     // Creating enrollment pattern
-    let addYear = (filds.batch - 4).toString().slice(2, 4) || '^[0-9][0-9]';
-    let dept = filds.dept || '^[A-Z][A-Z]';
+    let addYear = (filds.batch - 4).toString().slice(2, 4) || '[0-9][0-9]';
+    let dept = filds.dept || '[A-Z][A-Z]';
     let enrollmentPattern = `^ET${addYear}BT${dept}[0-9][0-9][0-9]`;
     let gender = filds.male ? filds.female ? '^.{1}' : 'M' : filds.female ? 'F' : '^.{1}' || '^.{1}';
     
@@ -35,7 +35,7 @@ const indexRoute = async (req, res) => {
 
     // Grouping data by 'applied' attribute
     switch(filds.groupBy){
-        case 'Department': data = groupByDept(data);
+        case 'dept': data = groupByDept(data);
                             break;
         
         case 'company' : data = data = groupByCompany(data);
@@ -91,7 +91,6 @@ const groupBySalary =(data) => {
 }
 
 const groupByDept = (data) => {
-    let key = 'salary'
     return data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
                 let groupKey = currentValue.enrollment_no.slice(6,8);
