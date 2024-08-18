@@ -18,10 +18,14 @@ router.get("/home",async (req,res,next) => {
         year = Number(req.query.year.slice(0,4)) - 3;
         year = Number(year.toString().slice(2,4));
     }
+    let deptCode = '01';
 
-    let enrollment_no = `ET${year}BT${dept}.{3}`;
+    let SU_enrollment_no = `^ET${year}BT${dept}.{3}`;
+    let GTU_enrollment_no = `^${year}04201${deptCode}5.{3}`
     let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { core : {} , IT : {} , managment : {}}};
-    let students = await Student.find({enrollment_no :{$regex : enrollment_no}});
+    let students = await Student.find({enrollment_no :{$regex : SU_enrollment_no}});
+    let gtuStudents = await Student.find({enrollment_no :{$regex : GTU_enrollment_no}});
+    students.push(...gtuStudents)
 
     if(students.length > 0){
         for(let student of students){

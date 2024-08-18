@@ -20,6 +20,10 @@ const companySchema = new mongoose.Schema({
         country_code: String,
         number: String
     },
+    batch: [{
+        type:Number
+        }
+    ],
     address: {
         type: String,
     },

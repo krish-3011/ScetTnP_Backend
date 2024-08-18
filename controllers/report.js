@@ -55,14 +55,15 @@ const groupByCompany = (data) => {
     return data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
         if (currentValue[key]) {
+            console.log(currentValue[key]);
             currentValue[key].forEach(groupKey => {
                 // Initialize the group if it doesn't exist
-                if (!result[groupKey]) {
-                    result[groupKey] = [];
+                if (!result[groupKey.company]) {
+                    result[groupKey.company] = [];
                 }
                 
                 // Add the current item to the group
-                result[groupKey].push(currentValue);
+                result[groupKey.company].push(currentValue);
             });
         } 
         
