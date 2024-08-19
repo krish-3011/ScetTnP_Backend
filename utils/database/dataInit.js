@@ -2,15 +2,12 @@ const mongoose = require("mongoose");
 const Company = require("../../schema/model/companySchema.js");
 const xlsx = require("xlsx");
 const Offer = require("../../schema/model/offerSchema.js");
-const Student = require("../../schema/model/studentSchema.js");
+const {Gtu_student} = require("../../schema/model/studentSchema.js");
 
 // Connecting to the database
 async function main() {
     try {
-        await mongoose.connect("mongodb+srv://krishpatel-3011:uz6pGaPneq1LJjv2@cluster0.ife8a3d.mongodb.net/scetTnP-new", {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect("mongodb+srv://krishpatel-3011:uz6pGaPneq1LJjv2@cluster0.ife8a3d.mongodb.net/scetTnP");
         console.log("Database connected");
         
         let dataSet = await getData();
@@ -72,11 +69,11 @@ async function addData(dataSet) {
             await Company.findByIdAndUpdate(company._id, { $set: { offers: company.offers } });
 
             // Updating student
-            let student = await Student.findOne({ enrollment_no: data['Enrolment No'] });
+            let student = await Gtu_student.findOne({ enrollment_no: data['Enrolment No'] });
 
             if (!student) {
                 await addStudent(data);
-                student = await Student.findOne({ enrollment_no: data['Enrolment No'] });
+                student = await Gtu_student.findOne({ enrollment_no: data['Enrolment No'] });
             }
 
             if (student) {
@@ -89,7 +86,7 @@ async function addData(dataSet) {
                     ? student.selected
                     : { offer: offer._id, salary: data['Salary Offered( P.A.)'] };
 
-                await Student.findByIdAndUpdate(student._id, { $set: { applied: student.applied, selected: student.selected } });
+                await Gtu_student.findByIdAndUpdate(student._id, { $set: { applied: student.applied, selected: student.selected } });
             }
 
             // Updating offer with applicants and selected students
@@ -130,7 +127,7 @@ async function addCompany(data) {
 
 async function addStudent(data) {
     try {
-        let newStudent = new Student({
+        let newStudent = new Gtu_student({
             enrollment_no: data['Enrolment No'],
             name: data['Selected Student Name'],
             gender: data['Gender'],

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Student = require("../../schema/model/studentSchema.js");
+const {Su_student} = require("../../schema/model/studentSchema.js");
 const Offer = require("../../schema/model/offerSchema.js");
 
 async function main() {
@@ -24,7 +24,7 @@ async function getOfferData() {
 
 async function assignOffer(offerId) {
     let count = 0;
-    let students = await Student.find({});
+    let students = await Su_student.find({});
     
     for (let student of students) {
         if (!student.applied) {
@@ -71,7 +71,7 @@ async function assignOffer(offerId) {
                 c++;
             }
         }
-        await Student.findByIdAndUpdate(student._id, { $set: { applied: student.applied, selected: student.selected } });
+        await Su_student.findByIdAndUpdate(student._id, { $set: { applied: student.applied, selected: student.selected } });
         console.log(`Student ${count} updated`);
         count += 1;
     }

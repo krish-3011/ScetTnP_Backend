@@ -83,5 +83,6 @@ const studentSchema = mongoose.Schema({
 
 });
 
-const Student = mongoose.model("Student",studentSchema);
-module.exports = Student;
+const Su_student = mongoose.model("Su_student",studentSchema);
+const Gtu_student = mongoose.model("Gtu_student",studentSchema);
+module.exports = {Su_student,Gtu_student};

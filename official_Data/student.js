@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
-const Student = require("../schema/model/studentSchema.js");
+const {Su_student} = require("../schema/model/studentSchema.js");
 const xlsx = require("xlsx");
 const moment = require("moment");
 
@@ -13,7 +13,7 @@ async function main() {
         console.log("Database connected");
 
         let DataSet = await getData();
-        await Student.deleteMany();
+        await Su_student.deleteMany();
         console.log("Existing data deleted successfully");
 
         await addData(DataSet);
@@ -53,7 +53,7 @@ async function addData(dataSet) {
     for (let data of dataSet) {
         data.birth_date = formatDateString(data.__EMPTY_2);
         // console.log(data.birth_date);
-        let newStudent = new Student({
+        let newStudent = new Su_student({
             enrollment_no: data.__EMPTY,
             name: data.__EMPTY_1,
             birth_date: data.birth_date,

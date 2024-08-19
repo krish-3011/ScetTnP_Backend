@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Student = require("../schema/model/studentSchema.js");
-const object = require("../utils/functions/Object.js");
+const {Su_student,Gtu_student} = require("../schema/model/studentSchema.js");
+const getDeptCode = require("../utils/functions/dataBase.js");
 
 //Home Route
 router.get("/",async (req,res) => {
@@ -18,13 +18,13 @@ router.get("/home",async (req,res,next) => {
         year = Number(req.query.year.slice(0,4)) - 3;
         year = Number(year.toString().slice(2,4));
     }
-    let deptCode = '01';
+    let deptCode = getDeptCode(dept);
 
     let SU_enrollment_no = `^ET${year}BT${dept}.{3}`;
-    let GTU_enrollment_no = `^${year}04201${deptCode}5.{3}`
+    let GTU_enrollment_no = `^${year}04201${deptCode}.{3}`;
     let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { core : {} , IT : {} , managment : {}}};
-    let students = await Student.find({enrollment_no :{$regex : SU_enrollment_no}});
-    let gtuStudents = await Student.find({enrollment_no :{$regex : GTU_enrollment_no}});
+    let students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}});
+    let gtuStudents = await Gtu_student.find({enrollment_no :{$regex : GTU_enrollment_no}});
     students.push(...gtuStudents)
 
     if(students.length > 0){
@@ -41,7 +41,8 @@ router.get("/home",async (req,res,next) => {
     }
 
     //heigest packge
-    enrollment_no = `ET.{2}BT${dept}.{3}`;
+    SU_enrollment_no = `^ET.{2}BT${dept}.{3}`;
+    GTU_enrollment_no = `^.{2}04201${deptCode}.{3}`
     let sum = {};
     //creating year obj
     let currentYear = 2026;
@@ -58,25 +59,28 @@ router.get("/home",async (req,res,next) => {
         
         currentYear -= 1;
     }
-
-    students = await Student.find({enrollment_no :{$regex : enrollment_no}}).populate('selected.offer');
+    students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}}).populate('selected.offer');
+    gtuStudents = await Gtu_student.find({enrollment_no :{$regex : GTU_enrollment_no}}).populate('selected.offer');
+    students.push(...gtuStudents);
     if(students.length > 0){
         for(let student of students){
             if(student.selected){
                 let addYear = Number(student.enrollment_no.slice(2,4))+2004;
 
-                //heights package
-                if(statObj.highestPackge[addYear] < student.selected.salary){
-                    statObj.highestPackge[addYear] = student.selected.salary;
+                if(sum[addYear]){
+
+                    //heights package
+                    if(statObj.highestPackge[addYear] < student.selected.salary){
+                        statObj.highestPackge[addYear] = student.selected.salary;
+                    }
+                    //average package
+                    sum[addYear].salary += student.selected.salary;
+                    sum[addYear].students += 1;
+
+                    //setor data
+                    let sector = student.selected.offer.sector;
+                    statObj.sector[sector][addYear] += 1;
                 }
-
-                //average package
-                sum[addYear].salary += student.selected.salary;
-                sum[addYear].students += 1;
-
-                //setor data
-                let sector = student.selected.offer.sector;
-                statObj.sector[sector][addYear] += 1;
             }
         }
         for(let year in statObj.averagePackge){
