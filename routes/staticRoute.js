@@ -45,7 +45,7 @@ router.get("/home",async (req,res,next) => {
     GTU_enrollment_no = `^.{2}04201${deptCode}.{3}`
     let sum = {};
     //creating year obj
-    let currentYear = 2024;
+    let currentYear = 2021;
     for(let yearCount = 0; yearCount < 5; yearCount++){
         let yearStr = `${currentYear}`
         statObj.highestPackge[yearStr] = 0;
@@ -59,6 +59,7 @@ router.get("/home",async (req,res,next) => {
         
         currentYear -= 1;
     }
+    console.log(statObj);
 
     // students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}}).populate('selected.offer');
 
