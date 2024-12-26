@@ -13,7 +13,7 @@ router.get("/",async (req,res) => {
 router.get("/home",async (req,res,next) => {
     //get filter
     let {year = ".{2}" , dept = ".{2}"} = req.query;
-    //geeting addmission year of student for enrollment no
+    //getting addmission year of student for enrollment no
     if(req.query.year){
         year = Number(req.query.year.slice(0,4)) - 3;
         year = Number(year.toString().slice(2,4));
@@ -59,9 +59,11 @@ router.get("/home",async (req,res,next) => {
         
         currentYear -= 1;
     }
-    students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}}).populate('selected.offer');
+    // students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}}).populate('selected.offer');
+
     gtuStudents = await Gtu_student.find({enrollment_no :{$regex : GTU_enrollment_no}}).populate('selected.offer');
-    students.push(...gtuStudents);
+    // students.push(...gtuStudents);
+    students = gtuStudents;
     if(students.length > 0){
         for(let student of students){
             if(student.selected){
@@ -70,6 +72,8 @@ router.get("/home",async (req,res,next) => {
                 if(sum[addYear]){
 
                     //heights package
+                    console.log(student);
+
                     if(statObj.highestPackge[addYear] < student.selected.salary){
                         statObj.highestPackge[addYear] = student.selected.salary;
                     }

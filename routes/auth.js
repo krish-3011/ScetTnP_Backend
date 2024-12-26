@@ -3,7 +3,7 @@ const session = require('express-session');
 const cors = require('cors');
 const router = express.Router();
 const mongoose = require("mongoose");
-const Student = require("../schema/model/studentSchema.js");
+const {Su_student,Gtu_student} = require("../schema/model/studentSchema.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 
 // Enable CORS
@@ -17,7 +17,7 @@ router.use(cors({
 router.post("/", wrapAsync(async (req, res) => {
     let { enrollmentNo, birthDate } = req.body;
 
-    let profile = await Student.findOne({ enrollment_no: enrollmentNo });
+    let profile = await Su_student.findOne({ enrollment_no: enrollmentNo }) || await Gtu_student.findOne({ enrollment_no: enrollmentNo });
     if (!profile) {
         return res.status(404).json({ message: "Student not found" });
     }
