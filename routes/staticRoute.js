@@ -22,7 +22,7 @@ router.get("/home",async (req,res,next) => {
 
     let SU_enrollment_no = `^ET${year}BT${dept}.{3}`;
     let GTU_enrollment_no = `^${year}04201${deptCode}.{3}`;
-    let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { core : {} , IT : {} , managment : {}}};
+    let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { CORE : {} , IT : {} , MANAGEMENT : {}}};
     let students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}});
     let gtuStudents = await Gtu_student.find({enrollment_no :{$regex : GTU_enrollment_no}});
     students.push(...gtuStudents)
@@ -45,34 +45,37 @@ router.get("/home",async (req,res,next) => {
     GTU_enrollment_no = `^.{2}04201${deptCode}.{3}`
     let sum = {};
     //creating year obj
-    let currentYear = 2026;
+    let currentYear = 2024;
     for(let yearCount = 0; yearCount < 5; yearCount++){
         let yearStr = `${currentYear}`
         statObj.highestPackge[yearStr] = 0;
         statObj.averagePackge[yearStr] = 0;
         // statObj.sector[yearStr] = { core : 0 , IT : 0, Managment : 0}
-        statObj.sector.core[yearStr] = 0;
+        statObj.sector.CORE[yearStr] = 0;
         statObj.sector.IT[yearStr] = 0;
-        statObj.sector.managment[yearStr] = 0;
+        statObj.sector.MANAGEMENT[yearStr] = 0;
 
         sum[yearStr] = {salary : 0 , students : 0};
         
         currentYear -= 1;
     }
+
     // students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}}).populate('selected.offer');
 
     gtuStudents = await Gtu_student.find({enrollment_no :{$regex : GTU_enrollment_no}}).populate('selected.offer');
     // students.push(...gtuStudents);
     students = gtuStudents;
+
     if(students.length > 0){
         for(let student of students){
             if(student.selected){
-                let addYear = Number(student.enrollment_no.slice(2,4))+2004;
+                // let addYear = Number(student.enrollment_no.slice(2,4))+2004;
+                let addYear = Number(student.enrollment_no.slice(0,2))+2000;
+
 
                 if(sum[addYear]){
 
                     //heights package
-                    console.log(student);
 
                     if(statObj.highestPackge[addYear] < student.selected.salary){
                         statObj.highestPackge[addYear] = student.selected.salary;
@@ -82,8 +85,8 @@ router.get("/home",async (req,res,next) => {
                     sum[addYear].students += 1;
 
                     //setor data
-                    let sector = student.selected.offer.sector;
-                    statObj.sector[sector][addYear] += 1;
+                    let sector = student.selected.offer.sector.toUpperCase();
+                    statObj.sector[sector][`${addYear}`] += 1;
                 }
             }
         }
