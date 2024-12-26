@@ -59,7 +59,7 @@ router.get("/home",async (req,res,next) => {
         
         currentYear -= 1;
     }
-    console.log(statObj);
+    S
 
     // students = await Su_student.find({enrollment_no :{$regex : SU_enrollment_no}}).populate('selected.offer');
 
