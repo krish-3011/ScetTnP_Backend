@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const {Su_student,Gtu_student} = require("../schema/model/studentSchema.js");
-const getDeptCode = require("../utils/functions/dataBase.js");
+const {getDeptCode,getDeptShortname} = require("../utils/functions/dataBase.js");
 
 //Home Route
 router.get("/",async (req,res) => {
