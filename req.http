@@ -1,1 +1,15 @@
-GET http://localhost:8080
+POST http://localhost:8080/report
+Content-Type: application/json
+
+{
+  "batch": "2022",
+"dept": "ECE",
+"female": true,
+"groupBy": "company",
+"intrested": true,
+"male": false,
+"onAccount": "student",
+"placed": true,
+"salaryAmount": "",
+"salaryOperator": "<"
+}

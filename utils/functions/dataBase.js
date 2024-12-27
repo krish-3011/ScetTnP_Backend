@@ -10,8 +10,24 @@ const deptCodeMap = {
     "Instrumentation & Control Engineering": "17"
 };
 
+const deptShortnameMap = {
+    "Computer Engineering": "CO",
+    "Information Technology": "IT",
+    "Civil Engineering": "CE",
+    "Mechanical Engineering": "ME",
+    "Electrical Engineering": "EE",
+    "Chemical Engineering": "CH",
+    "Textile Technology": "TT",
+    "Electronics & Communication Engineering": "EC",
+    "Instrumentation & Control Engineering": "IC"
+};
+
 const getDeptCode = (deptName) =>{
     return deptCodeMap[deptName] || ".{2}"; // Return "00" or some default if not found
 }
 
-module.exports = getDeptCode;
+const getDeptShortname = (deptCode) =>{
+    return deptShortnameMap[Object.keys(obj).filter(key => obj[key] === deptCode)]
+}
+
+module.exports = {getDeptCode,getDeptShortname};

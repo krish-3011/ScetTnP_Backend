@@ -1,18 +1,33 @@
 const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
-const Student = require("../schema/model/studentSchema.js");
+const {Su_student,Gtu_student} = require("../schema/model/studentSchema.js");
+const {getDeptCode,getDeptShortname} = require("../utils/functions/dataBase.js");
 
-const indexRoute = async (req, res) => {
+const GTUdata = async (filds) => {
+
+    // Creating enrollment pattern
+    let addYear = (filds.batch - 4).toString().slice(2, 4) || '[0-9][0-9]';
+    let deptCode = getDeptCode(filds.dept) || '[0-9][0-9]';
+    let enrollmentPattern = `^${addYear}04201${deptCode}[0-9][0-9][0-9]`;
+    let gender = filds.male ? filds.female ? '^.{1}' : 'M' : filds.female ? 'F' : '^.{1}' || '^.{1}';
     
-    // Retrieving Data from student
-    let filds = req.body;
+    let matchcriteria = {
+        enrollment_no: { $regex: enrollmentPattern },
+        gender: { $regex: gender },
+    };
 
-    // Checking for empty fields
-    if (!filds) {
-        let err = new Error("Invalid Data");
-        err.status = 400;
-        throw err;
+    // Adding salary filter
+    if (filds.salaryAmount) {
+        let salaryOperator = filds.salaryOperator === "<" ? "$lte" : "$gte";
+        matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
+    // Retrieving all Data  
+    let data = await Gtu_student.find(matchcriteria);
+
+    return data;
+}
+
+const getSUdata = async (filds) => {
 
     // Creating enrollment pattern
     let addYear = (filds.batch - 4).toString().slice(2, 4) || '[0-9][0-9]';
@@ -31,8 +46,66 @@ const indexRoute = async (req, res) => {
         matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
     // Retrieving all Data  
-    let data = await Student.find(matchcriteria).populate('applied').populate('selected');
+    let data = await Su_student.find(matchcriteria);
 
+    return data;
+}
+
+
+
+const GTUdataGroupByDept = (result,data) => {  
+
+    data = data.reduce((result, currentValue) => {
+        // Check if the current value has the specified key
+                let groupKey = getDeptShortname(currentValue.enrollment_no.slice(0,2));
+                // Initialize the group if it doesn't exist
+                if (!result[groupKey]) {
+                    result[groupKey] = [];
+                }
+                
+                // Add the current item to the group
+                result[groupKey].push(currentValue);
+        
+        return result;
+    }, {});
+    return result.append(...data);
+}
+
+const SUdataGroupByDept = (data) =>{
+    data = data.reduce((result, currentValue) => {
+        // Check if the current value has the specified key
+                let groupKey = currentValue.enrollment_no.slice(6,8);
+                // Initialize the group if it doesn't exist
+                if (!result[groupKey]) {
+                    result[groupKey] = [];
+                }
+                
+                // Add the current item to the group
+                result[groupKey].push(currentValue);
+        
+        return result;
+    }, {});
+    return result.append(...data);
+}
+
+const indexRoute = async (req, res) => {
+    
+    // Retrieving Data from student
+    let filds = req.body;
+
+    // Checking for empty fields
+    if (!filds) {
+        let err = new Error("Invalid Data");
+        err.status = 400;
+        throw err;
+    }
+    
+    let data = await GTUdata(filds);
+
+    let SUdata = await getSUdata(filds);
+
+    data.push(...SUdata);
+    
     // Grouping data by 'applied' attribute
     switch(filds.groupBy){
         case 'dept': data = groupByDept(data);
@@ -55,7 +128,6 @@ const groupByCompany = (data) => {
     return data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
         if (currentValue[key]) {
-            console.log(currentValue[key]);
             currentValue[key].forEach(groupKey => {
                 // Initialize the group if it doesn't exist
                 if (!result[groupKey.company]) {
@@ -92,19 +164,13 @@ const groupBySalary =(data) => {
 }
 
 const groupByDept = (data) => {
-    return data.reduce((result, currentValue) => {
-        // Check if the current value has the specified key
-                let groupKey = currentValue.enrollment_no.slice(6,8);
-                // Initialize the group if it doesn't exist
-                if (!result[groupKey]) {
-                    result[groupKey] = [];
-                }
-                
-                // Add the current item to the group
-                result[groupKey].push(currentValue);
-        
-        return result;
-    }, {});
+    let result = {};
+
+    result = GTUdataGroupByDept(result,data);
+    result = SUdataGroupByDept(result,data);
+
+    return result;
 }
+
 
 module.exports = {indexRoute};
