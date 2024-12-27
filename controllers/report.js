@@ -22,7 +22,7 @@ const GTUdata = async (filds) => {
         matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
     // Retrieving all Data  
-    let data = await Gtu_student.find(matchcriteria);
+    let data = await Gtu_student.find(matchcriteria).populate('applied').populate('selected');
 
     return data;
 }
@@ -46,7 +46,7 @@ const getSUdata = async (filds) => {
         matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
     // Retrieving all Data  
-    let data = await Su_student.find(matchcriteria);
+    let data = await Su_student.find(matchcriteria).populate('applied').populate('selected');
 
     return data;
 }
@@ -128,6 +128,7 @@ const groupByCompany = (data) => {
     return data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
         if (currentValue[key]) {
+            console.log(currentValue[key]);
             currentValue[key].forEach(groupKey => {
                 // Initialize the group if it doesn't exist
                 if (!result[groupKey.company]) {
