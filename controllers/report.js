@@ -53,27 +53,39 @@ const getSUdata = async (filds) => {
 
 
 
-const GTUdataGroupByDept = (result,data) => {  
+const GTUdataGroupByDept = (resul,data) => {  
+    if(!data){
+        return resul;
+    }
 
     data = data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
-                let groupKey = getDeptShortname(currentValue.enrollment_no.slice(0,2));
+                let groupKey = getDeptShortname(currentValue.enrollment_no.slice(7,9));
                 // Initialize the group if it doesn't exist
                 if (!result[groupKey]) {
                     result[groupKey] = [];
                 }
                 
+                //remove currentvalue from data
+                data = data.filter((value) => { return value.enrollment_no !== currentValue.enrollment_no; });
+
                 // Add the current item to the group
                 result[groupKey].push(currentValue);
         
         return result;
     }, {});
-    return result.append(...data);
+    return {...resul,...data};
 }
 
-const SUdataGroupByDept = (data) =>{
+const SUdataGroupByDept = (resul,data) => {
+
+    if(!data){
+        return resul;
+    }
+
     data = data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
+        console.log(currentValue.enrollment_no)
                 let groupKey = currentValue.enrollment_no.slice(6,8);
                 // Initialize the group if it doesn't exist
                 if (!result[groupKey]) {
@@ -82,10 +94,12 @@ const SUdataGroupByDept = (data) =>{
                 
                 // Add the current item to the group
                 result[groupKey].push(currentValue);
+
         
         return result;
     }, {});
-    return result.append(...data);
+    console.log(Object.keys(data))
+    return {...resul,...data};
 }
 
 const indexRoute = async (req, res) => {
@@ -104,17 +118,19 @@ const indexRoute = async (req, res) => {
 
     let SUdata = await getSUdata(filds);
 
-    data.push(...SUdata);
     
     // Grouping data by 'applied' attribute
     switch(filds.groupBy){
-        case 'dept': data = groupByDept(data);
-                            break;
+    
+    case 'dept':data.push(...SUdata);
+                 data = groupByDept(data);
+                break;
         
-        case 'company' : data = data = groupByCompany(data);
+        case 'company' : data.push(...SUdata);
+                        data = data = groupByCompany(data);
                         break;
 
-        case 'salary' :  data = data = groupBySalary(data);
+        case 'salary' :  data = data = groupBySalary(data,SUdata);
                         break;
     }
 
@@ -163,11 +179,11 @@ const groupBySalary =(data) => {
     }, {});
 }
 
-const groupByDept = (data) => {
+const groupByDept = (GTUData,SUData) => {
     let result = {};
 
-    result = GTUdataGroupByDept(result,data);
-    result = SUdataGroupByDept(result,data);
+    result = GTUdataGroupByDept(result,GTUData);
+    result = SUdataGroupByDept(result,SUData);
 
     return result;
 }

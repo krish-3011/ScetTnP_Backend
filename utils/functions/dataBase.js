@@ -27,7 +27,9 @@ const getDeptCode = (deptName) =>{
 }
 
 const getDeptShortname = (deptCode) =>{
-    return deptShortnameMap[Object.keys(obj).filter(key => obj[key] === deptCode)]
+    let data =  deptShortnameMap[Object.keys(deptCodeMap).find(name => deptCodeMap[name] === String(deptCode))]
+    return data;
 }
+
 
 module.exports = {getDeptCode,getDeptShortname};
