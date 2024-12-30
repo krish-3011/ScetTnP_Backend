@@ -1,4 +1,15 @@
-POST http://localhost:8080/notification
+POST http://localhost:8080/report
 Content-Type: application/json
 
-{"message": "hello"}
+{
+  "batch": "2022",
+"dept": "ECE",
+"female": true,
+"groupBy": "company",
+"intrested": true,
+"male": false,
+"onAccount": "student",
+"placed": true,
+"salaryAmount": "",
+"salaryOperator": "<"
+}
