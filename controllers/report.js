@@ -22,7 +22,14 @@ const GTUdata = async (filds) => {
         matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
     // Retrieving all Data  
-    let data = await Gtu_student.find(matchcriteria).populate('applied').populate('selected');
+    let data = await Gtu_student.find(matchcriteria)
+    .populate({
+        path : 'applied',
+        populate : {path : 'company'}
+    }).populate({
+        path : 'selected',
+        populate : {path : 'company'}
+    });
 
     return data;
 }
@@ -46,7 +53,14 @@ const getSUdata = async (filds) => {
         matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
     // Retrieving all Data  
-    let data = await Su_student.find(matchcriteria).populate('applied').populate('selected');
+    let data = await Su_student.find(matchcriteria)
+    .populate({
+        path : 'applied',
+        populate : {path : 'company'}
+    }).populate({
+        path : 'selected',
+        populate : {path : 'company'}
+    });
 
     return data;
 }

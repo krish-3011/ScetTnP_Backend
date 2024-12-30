@@ -5,7 +5,7 @@ Content-Type: application/json
   "batch": "2022",
 "dept": "ECE",
 "female": true,
-"groupBy": "dept",
+"groupBy": "company",
 "intrested": true,
 "male": false,
 "onAccount": "student",
