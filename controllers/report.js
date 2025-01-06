@@ -22,7 +22,19 @@ const GTUdata = async (filds) => {
         matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
     // Retrieving all Data  
-    let data = await Gtu_student.find(matchcriteria).populate('applied').populate('selected');
+    let data = await Gtu_student.find(matchcriteria)
+    .populate({
+        path : 'applied',
+        populate : {path : 'company'}
+    }).populate({
+        path : 'selected',
+        populate : 
+        {
+            path : 'offer',
+            populate : {path : 'company'}
+
+        }
+    }); 
 
     return data;
 }
@@ -46,7 +58,19 @@ const getSUdata = async (filds) => {
         matchcriteria["selected.salary"] = { [salaryOperator]: filds.salaryAmount };
     }
     // Retrieving all Data  
-    let data = await Su_student.find(matchcriteria).populate('applied').populate('selected');
+    let data = await Su_student.find(matchcriteria)
+    .populate({
+        path : 'applied',
+        populate : {path : 'company'}
+    }).populate({
+        path : 'selected',
+        populate : 
+        {
+            path : 'offer',
+            populate : {path : 'company'}
+
+        }
+    }); 
 
     return data;
 }
@@ -69,8 +93,18 @@ const GTUdataGroupByDept = (resul,data) => {
                 //remove currentvalue from data
                 data = data.filter((value) => { return value.enrollment_no !== currentValue.enrollment_no; });
 
+                newObj = {
+                    name : currentValue.name,
+                    enrollment_no : currentValue.enrollment_no,
+                    gender : currentValue.gender,
+                    cast : currentValue.cast,
+                    salary : currentValue.selected.salary,
+                    sector : currentValue.selected.offer.sector,
+                    company : currentValue.selected.offer.company.name,
+                }
+
                 // Add the current item to the group
-                result[groupKey].push(currentValue);
+                result[groupKey].push(newObj);
         
         return result;
     }, {});
@@ -85,20 +119,27 @@ const SUdataGroupByDept = (resul,data) => {
 
     data = data.reduce((result, currentValue) => {
         // Check if the current value has the specified key
-        console.log(currentValue.enrollment_no)
                 let groupKey = currentValue.enrollment_no.slice(6,8);
                 // Initialize the group if it doesn't exist
                 if (!result[groupKey]) {
                     result[groupKey] = [];
                 }
-                
+                newObj = {
+                    name : currentValue.name,
+                    enrollment_no : currentValue.enrollment_no,
+                    gender : currentValue.gender,
+                    cast : currentValue.cast,
+                    salary : currentValue.selected.salary,
+                    sector : currentValue.selected.offer.sector,
+                    company : currentValue.selected.offer.company.name,
+                }
+
                 // Add the current item to the group
-                result[groupKey].push(currentValue);
+                result[groupKey].push(newObj);
 
         
         return result;
     }, {});
-    console.log(Object.keys(data))
     return {...resul,...data};
 }
 
@@ -127,10 +168,10 @@ const indexRoute = async (req, res) => {
                 break;
         
         case 'company' : data.push(...SUdata);
-                        data = data = groupByCompany(data);
+                        data = groupByCompany(data);
                         break;
 
-        case 'salary' :  data = data = groupBySalary(data,SUdata);
+        case 'salary' :  data = groupBySalary(data,SUdata);
                         break;
     }
 
@@ -146,12 +187,22 @@ const groupByCompany = (data) => {
         if (currentValue[key]) {
             currentValue[key].forEach(groupKey => {
                 // Initialize the group if it doesn't exist
-                if (!result[groupKey.company]) {
-                    result[groupKey.company] = [];
+                if (!result[groupKey.company.name]) {
+                    result[groupKey.company.name] = [];
                 }
                 
+                newObj = {
+                    name : currentValue.name,
+                    enrollment_no : currentValue.enrollment_no,
+                    gender : currentValue.gender,
+                    cast : currentValue.cast,
+                    salary : currentValue.selected.salary,
+                    sector : currentValue.selected.offer.sector,
+                    company : currentValue.selected.offer.company.name,
+                }
+
                 // Add the current item to the group
-                result[groupKey.company].push(currentValue);
+                result[groupKey.company.name].push(newObj);
             });
         } 
         
@@ -169,9 +220,18 @@ const groupBySalary =(data) => {
                 if (!result[groupKey]) {
                     result[groupKey] = [];
                 }
-                
+                newObj = {
+                    name : currentValue.name,
+                    enrollment_no : currentValue.enrollment_no,
+                    gender : currentValue.gender,
+                    cast : currentValue.cast,
+                    salary : currentValue.selected.salary,
+                    sector : currentValue.selected.offer.sector,
+                    company : currentValue.selected.offer.company.name,
+                }
+
                 // Add the current item to the group
-                result[groupKey].push(currentValue);
+                result[groupKey].push(newObj);
             
         }
         

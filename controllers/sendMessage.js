@@ -27,10 +27,9 @@ async function sendMessage(notificationData) {
                 .map(att => att.path ? `<img src="${att.path}" alt="Notification Image" style="max-width: 100%; height: auto;"/>` : '').join('\n');
     }
 
-        console.log(notificationData.attachments);
         const mail = {
             from: mailId,
-            to: 'mannpatel.co22d2@scet.ac.in',
+            to: 'krishpatel.co22d2@scet.ac.in',
             subject: "New Notification arrived",
             html: `
                 <p>${notificationData.message}</p>
