@@ -5,11 +5,13 @@ Content-Type: application/json
   "batch": "2022",
 "dept": "ECE",
 "female": true,
-"groupBy": "dept",
+"groupBy": "salary",
 "intrested": true,
 "male": false,
 "onAccount": "student",
 "placed": true,
-"salaryAmount": "",
-"salaryOperator": "<"
+"salaryAmount": "0",
+"salaryOperator": ">"
 }
+
+# GET http://localhost:8080

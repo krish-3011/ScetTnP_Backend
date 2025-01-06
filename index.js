@@ -23,10 +23,10 @@ const DB_URL = process.env.DB_URL;
 const PORT = process.env.PORT;
 
 // Middleware
-app.use(cors({
-    origin: ['https://scettnp-frontend.onrender.com','http://localhost:3000'], // Specify your frontend origin
-    credentials: true // Allow cookies to be sent with requests
-}));
+// app.use(cors({
+//     origin: ['https://scettnp-frontend.onrender.com','http://localhost:3000','http://localhost:8080'], // Specify your frontend origin
+//     credentials: true // Allow cookies to be sent with requests
+// }));
 
 
 // Connect to the database

@@ -122,7 +122,7 @@ const indexRoute = async (req, res) => {
     // Grouping data by 'applied' attribute
     switch(filds.groupBy){
     
-    case 'dept':data.push(...SUdata);
+    case 'dept'://data.push(...SUdata);
                  data = groupByDept(data);
                 break;
         
