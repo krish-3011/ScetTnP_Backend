@@ -1,17 +1,17 @@
-POST http://localhost:8080/report
-Content-Type: application/json
+# POST http://localhost:8080/report
+# Content-Type: application/json
 
-{
-  "batch": "2022",
-"dept": "CO",
-"female": true,
-"groupBy": "dept",
-"intrested": true,
-"male": false,
-"onAccount": "student",
-"placed": true,
-"salaryAmount": "0",
-"salaryOperator": ">"
-}
+# {
+#   "batch": "2022",
+# "dept": "CO",
+# "female": true,
+# "groupBy": "dept",
+# "intrested": true,
+# "male": false,
+# "onAccount": "student",
+# "placed": true,
+# "salaryAmount": "0",
+# "salaryOperator": ">"
+# }
 
-# GET http://localhost:8080
+GET http://localhost:8080/home?year=2021
