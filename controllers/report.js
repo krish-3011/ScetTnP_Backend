@@ -1,13 +1,13 @@
 const Offer = require("../schema/model/offerSchema.js");
 const Company = require("../schema/model/companySchema.js");
 const {Su_student,Gtu_student} = require("../schema/model/studentSchema.js");
-const {getDeptCode,getDeptShortname} = require("../utils/functions/dataBase.js");
+const {getDeptCode,getDeptShortname,getName} = require("../utils/functions/dataBase.js");
 
 const GTUdata = async (filds) => {
 
     // Creating enrollment pattern
     let addYear = (filds.batch - 4).toString().slice(2, 4) || '[0-9][0-9]';
-    let deptCode = getDeptCode(filds.dept) || '[0-9][0-9]';
+    let deptCode = getDeptCode(getName(filds.dept)) || '[0-9][0-9]';
     let enrollmentPattern = `^${addYear}04201${deptCode}[0-9][0-9][0-9]`;
     let gender = filds.male ? filds.female ? '^.{1}' : 'M' : filds.female ? 'F' : '^.{1}' || '^.{1}';
     

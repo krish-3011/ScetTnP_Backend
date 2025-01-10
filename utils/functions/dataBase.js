@@ -31,5 +31,10 @@ const getDeptShortname = (deptCode) =>{
     return data;
 }
 
+const getName = (deptShortName) =>{
+    let name = Object.keys(deptShortnameMap).find(name => deptShortnameMap[name] === deptShortName);
+    return name;
+}
 
-module.exports = {getDeptCode,getDeptShortname};
+
+module.exports = {getDeptCode,getDeptShortname,getName};

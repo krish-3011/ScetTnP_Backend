@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "batch": "2022",
-"dept": "ECE",
+"dept": "CO",
 "female": true,
 "groupBy": "dept",
 "intrested": true,
