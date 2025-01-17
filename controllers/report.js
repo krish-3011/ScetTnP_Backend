@@ -159,9 +159,9 @@ const groupByCompany = (data) => {
                     enrollment_no : currentValue.enrollment_no,
                     gender : currentValue.gender,
                     cast : currentValue.cast,
-                    salary : currentValue.selected.salary,
-                    sector : currentValue.selected.offer.sector,
-                    company : currentValue.selected.offer.company.name,
+                    salary : currentValue.selected[0].salary,
+                    sector : currentValue.selected[0].offer.sector,
+                    company : currentValue.selected[0].offer.company.name,
                 }
 
                 // Add the current item to the group
@@ -211,6 +211,18 @@ const groupByDept = (GTUData,SUData) => {
     return result;
 }
 
+const getCompanyReport = async (year) => {
+
+
+    let companiesVisited = {
+            CORE : 0,
+            IT : 0,
+            MANAGEMENT : 0,
+            OTHER : 0
+        };
+}
+
+//Index route
 const indexRoute = async (req, res) => {
     
     // Retrieving Data from student
@@ -247,11 +259,103 @@ const indexRoute = async (req, res) => {
     res.send(data);
 };
 
+//annual Report
+// const annualReportRoute = async (req, res) =>{
 
-const annualReportRoute = (req, res) =>{
+//     //get parameter4
+//     if (!req.query.year) {
+//         let err = new Error("Invalid Request");
+//         err.status = 400;
+//         throw err;
+//     }
 
-        
-}
+//     //getting addmission year
+//     year = Number(req.query.year.slice(0,4))-4;
+//     year = Number(year.toString().slice(2,4));
+
+//     //initialize obj
+//     let report = {
+//         companiesVisited : {
+//             CORE : 0,
+//             IT : 0,
+//             MANAGEMENT : 0,
+//             OTHER : 0
+//         },
+//         companiesRecruited : {
+//             CORE : 0,
+//             IT : 0,
+//             MANAGEMENT : 0,
+//             OTHER : 0
+//         },
+//         applied:0,
+//         selected:0,
+//         multipleJobStudent : 0,
+//         singleJobStudent : 0,
+//         maxSalary : 0,
+//         minSalary : 0,
+//         aveSalary : 0,
+//         medianSalary : 0
+//     }
+
+//     //retrive data
+//     let offers = await Offer.find({last_date : {$gte : new Date(`${year}-01-01`), $lte : new Date(`${year}-12-31`)}}).populate('company').populate('selected');
+    
+//     //formate data
+//     for(let offer of offers){
+
+//         //companiesVisited
+//         if(offer.company.sector.toUpperCase() === 'CORE'){
+//             report.companiesVisited.CORE += 1;
+//         }else if(offer.company.sector.toUpperCase() === 'IT'){
+//             report.companiesVisited.IT += 1;
+//         }else if(offer.company.sector.toUpperCase() === 'MANAGEMENT'){
+//             report.companiesVisited.MANAGEMENT += 1;
+//         }
+//         else{
+//             report.companiesVisited.OTHER += 1;
+//         }
+
+//         //companiesRecruited
+//         if( Array.isArray(offer.selected) && offer.selected.length > 0){
+//             if(offer.company.sector.toUpperCase() === 'CORE'){
+//                 report.companiesRecruited.CORE += 1;
+//             }else if(offer.company.sector.toUpperCase() === 'IT'){
+//                 report.companiesRecruited.IT += 1;
+//             }else if(offer.company.sector.toUpperCase() === 'MANAGEMENT'){
+//                 report.companiesRecruited.MANAGEMENT += 1;
+//             }
+//             else{
+//                 report.companiesRecruited.OTHER += 1;
+//             }
+//         }
+
+//         //Applied
+//         report.applied += offer.applicants.length;
+
+//         //selected
+//         report.selected += offer.selected.length;
+
+//         for(let student of offer.selected){
+//             if(student.selected.length > 1){
+//                 report.multipleJobStudent += 1;
+//             }else{
+//                 report.singleJobStudent += 1;
+//             }
+
+//             if(student.salary > report.maxSalary){
+//                 report.maxSalary = student.salary;
+//             }
+
+//             if(student.salary < report.minSalary){
+//                 report.minSalary = student.salary;
+//             }
+
+//             report.aveSalary += student.salary;
+//         }
+//     }
+//     //send data
+
+// }
 
 
-module.exports = {indexRoute};
+module.exports = {indexRoute,annualReportRoute};

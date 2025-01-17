@@ -1,5 +1,3 @@
-let obj = {
-    "mann" : "08"
-};
+let date = new Date();
 
-console.log(`${Object.keys(obj).filter(key => obj[key] === "08")}`); // true : false
+console.log(date);
