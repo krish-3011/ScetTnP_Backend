@@ -2,16 +2,16 @@
 # Content-Type: application/json
 
 # {
-#   "batch": "2022",
-# "dept": "CO",
-# "female": true,
-# "groupBy": "dept",
-# "intrested": true,
-# "male": false,
-# "onAccount": "student",
-# "placed": true,
-# "salaryAmount": "0",
-# "salaryOperator": ">"
+    # "batch": "2022",
+    # "dept": "CO",
+    # "female": true,
+    # "groupBy": "dept",
+    # "intrested": true,
+    # "male": false,
+    # "onAccount": "student",
+    # "placed": true,
+    # "salaryAmount": "0",
+    # "salaryOperator": ">"
 # }
 
-GET http://localhost:8080/home?year=2021
+GET http://localhost:8080/home

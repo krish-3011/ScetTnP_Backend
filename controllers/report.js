@@ -61,8 +61,8 @@ const getSUdata = async (filds) => {
     let data = await Su_student.find(matchcriteria)
     .populate({
         path : 'applied',
-        populate : {path : 'company'}
-    }).populate({
+        populate : {path : 'company'}})
+    .populate({
         path : 'selected',
         populate : 
         {
@@ -143,43 +143,6 @@ const SUdataGroupByDept = (resul,data) => {
     return {...resul,...data};
 }
 
-const indexRoute = async (req, res) => {
-    
-    // Retrieving Data from student
-    let filds = req.body;
-
-    // Checking for empty fields
-    if (!filds) {
-        let err = new Error("Invalid Data");
-        err.status = 400;
-        throw err;
-    }
-    
-    let data = await GTUdata(filds);
-
-    let SUdata = await getSUdata(filds);
-
-    
-    // Grouping data by 'applied' attribute
-    switch(filds.groupBy){
-    
-    case 'dept'://data.push(...SUdata);
-                 data = groupByDept(data);
-                break;
-        
-        case 'company' : data.push(...SUdata);
-                        data = groupByCompany(data);
-                        break;
-
-        case 'salary' :  data = groupBySalary(data,SUdata);
-                        break;
-    }
-
-    // Sending response
-    res.send(data);
-};
-
-
 const groupByCompany = (data) => {
     let key = 'applied'
     return data.reduce((result, currentValue) => {
@@ -246,6 +209,48 @@ const groupByDept = (GTUData,SUData) => {
     result = SUdataGroupByDept(result,SUData);
 
     return result;
+}
+
+const indexRoute = async (req, res) => {
+    
+    // Retrieving Data from student
+    let filds = req.body;
+
+    // Checking for empty fields
+    if (!filds) {
+        let err = new Error("Invalid Data");
+        err.status = 400;
+        throw err;
+    }
+    
+    let data = await GTUdata(filds);
+
+    let SUdata = await getSUdata(filds);
+
+    
+    // Grouping data by 'applied' attribute
+    switch(filds.groupBy){
+    
+    case 'dept'://data.push(...SUdata);
+                 data = groupByDept(data);
+                break;
+        
+        case 'company' : data.push(...SUdata);
+                        data = groupByCompany(data);
+                        break;
+
+        case 'salary' :  data = groupBySalary(data,SUdata);
+                        break;
+    }
+
+    // Sending response
+    res.send(data);
+};
+
+
+const annualReportRoute = (req, res) =>{
+
+        
 }
 
 

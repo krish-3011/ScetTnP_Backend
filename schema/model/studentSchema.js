@@ -1,4 +1,4 @@
-const { type } = require("express/lib/response");
+const { type, status } = require("express/lib/response");
 const mongoose = require("mongoose");
 const Offer = require("./offerSchema.js");
 
@@ -69,7 +69,7 @@ const studentSchema = mongoose.Schema({
         type : mongoose.Schema.ObjectId,
         ref : 'Offer'
     }],
-    selected : {
+    selected : [{
         type : {
             offer:{
                 type:mongoose.Schema.ObjectId,
@@ -77,9 +77,12 @@ const studentSchema = mongoose.Schema({
             },
             salary : {
                 type : Number,
+            },
+            status : {
+                type : Boolean,
             }
         }
-    }
+    }]
 
 });
 
