@@ -234,6 +234,7 @@ let indexRoute = async (req,res) => {
         year = Number(req.query.year.slice(0,4))-4;
         year = Number(year.toString().slice(2,4));
     }
+    console.log(dept)
 
     statObj = await getSUData(year,dept);
     statObj = await getGtuData(statObj,year,dept);
