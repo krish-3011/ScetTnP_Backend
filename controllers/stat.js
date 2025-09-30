@@ -13,6 +13,7 @@ let getSUData = async (year,dept) => {
     let students = await Student.Su_student.find({enrollment_no :{$regex : SU_enrollment_no}});
     let d2dStudent = await Student.Su_student.find({enrollment_no :{$regex : SU_D2D_enrollment_no}});
     students.push(...d2dStudent);
+    
 
 
     let statObj = { total : 0, intrested : 0, placed : 0, highestPackge : {} , averagePackge : {} , sector : { CORE : {} , IT : {} , MANAGEMENT : {} , OTHER : {}}};
@@ -132,6 +133,9 @@ let getGtuData = async (statObj,year,dept) => {
     let students = await Student.Gtu_student.find({enrollment_no :{$regex : GTU_enrollment_no}});
     let d2dStudent = await Student.Gtu_student.find({enrollment_no :{$regex : GTU_D2D_enrollment_no}});
     students.push(...d2dStudent);
+
+    console.log("DeptCode:", deptCode, "GTU Regex:", GTU_enrollment_no, GTU_D2D_enrollment_no);
+
     // fill stat Obj
     if( Array.isArray(students) && students.length > 0){
         for(let student of students){
