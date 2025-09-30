@@ -358,4 +358,4 @@ const indexRoute = async (req, res) => {
 // }
 
 
-module.exports = {indexRoute,annualReportRoute};
+module.exports = {indexRoute};
