@@ -60,7 +60,7 @@ let getSUData = async (year,dept) => {
         currentYear -= 1;
     }
 
-    // return statObj;
+    return statObj;
 
 
     SU_enrollment_no = `^ET.{2}BT${dept}.{3}`;
